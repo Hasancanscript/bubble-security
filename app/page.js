@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 export default function HomePage() {
   return (
     <main style={{ display: "grid", gap: 28 }}>
+      {/* Lern Demo Hinweis */}
+      <LernDemoBanner />
       <HeroWithMatrix />
       <ServicesSection />
       <BenefitsSection />
@@ -14,6 +16,28 @@ export default function HomePage() {
       <CTASection />
       <PartnersSection />
     </main>
+  );
+}
+
+/* =========================
+   Lern Demo Banner
+   ========================= */
+function LernDemoBanner() {
+  return (
+    <div
+      style={{
+        width: "100%",
+        background: "rgba(245,158,11,0.10)",
+        color: "rgb(252,211,77)",
+        fontSize: 14,
+        padding: "10px 16px",
+        textAlign: "center",
+        borderRadius: 12,
+        border: "1px solid rgba(245,158,11,0.35)",
+      }}
+    >
+      Hinweis: Dieses Projekt ist eine Lern und Demo Webseite. Es gibt keine echten Angebote.
+    </div>
   );
 }
 
@@ -82,8 +106,7 @@ function HeroWithMatrix() {
             maxWidth: 720,
           }}
         >
-          Wir machen IT Sicherheit einfach, verständlich und praxistauglich, für Teams
-          und KMU.
+          Wir erklären Cybersecurity einfach und praxisnah. Lern Demo für Teams und KMU.
         </p>
 
         <div
@@ -95,8 +118,9 @@ function HeroWithMatrix() {
             marginBottom: 16,
           }}
         >
-          <Link href="/security" className="btn btn-primary">
-            Mehr über IT Security
+          {/* direkte Detailseite Lektion 1 */}
+          <Link href="/services/threat-detection" className="btn btn-primary">
+            Lektion 1 starten
           </Link>
           <Link href="/quiz" className="btn btn-ghost">
             Quiz starten
@@ -129,6 +153,7 @@ function MatrixCanvas({ running }) {
 
     const dpr = Math.max(1, window.devicePixelRatio || 1);
     const ctx = canvas.getContext("2d");
+    if (!ctx) return;
     ctxRef.current = ctx;
 
     const resize = () => {
@@ -200,6 +225,7 @@ function MatrixCanvas({ running }) {
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
       const ctx = ctxRef.current;
+      if (!ctx) return;
 
       ctx.fillStyle = "rgba(0,0,0,0.16)";
       ctx.fillRect(0, 0, width, height);
@@ -233,37 +259,37 @@ function MatrixCanvas({ running }) {
 }
 
 /* =========================
-   Services
+   Lerneinheiten Karten auf Home
    ========================= */
 function ServicesSection() {
   const services = [
     {
-      title: "Bedrohungserkennung und Reaktion",
-      desc: "24/7 Monitoring, Alarmierung und Incident Response, vom ersten Hinweis bis zur Eindämmung.",
+      title: "Lektion 1 Bedrohungen erkennen",
+      desc: "Du lernst häufige Angriffe zu erkennen und richtig zu reagieren.",
       icon: ShieldCheckIcon,
       href: "/services/threat-detection",
     },
     {
-      title: "Netzwerk und Cloud Sicherheit",
-      desc: "Zero Trust, sichere Konfigurationen M365, Azure, AWS und kontinuierliche Härtung.",
+      title: "Lektion 2 Netzwerk und Cloud sicher",
+      desc: "Zero Trust Grundlagen, sichere Konfiguration in M365, Azure und AWS.",
       icon: CloudLockIcon,
       href: "/services/network-cloud",
     },
     {
-      title: "Daten und Inhaltsschutz",
-      desc: "DLP, Verschlüsselung und Richtlinien, sensible Informationen schützen.",
+      title: "Lektion 3 Daten und Inhalte schützen",
+      desc: "DLP Verschlüsselung und Richtlinien verständlich erklärt.",
       icon: DatabaseLockIcon,
       href: "/services/data-protection",
     },
     {
-      title: "Endpunkt Sicherheit",
-      desc: "EDR oder Antivirus, sichere Konfiguration, Patch Management, Windows, macOS und Mobil.",
+      title: "Lektion 4 Endgeräte absichern",
+      desc: "EDR oder Antivirus, Patches und sichere Einstellungen auf Windows, macOS und Mobil.",
       icon: DeviceShieldIcon,
       href: "/services/endpoint-security",
     },
     {
-      title: "Security Awareness",
-      desc: "Trainings und Phishing Simulationen, Verhalten stärken, Risiken senken.",
+      title: "Lektion 5 Security Awareness",
+      desc: "Phishing erkennen, gutes Verhalten trainieren, Risiken senken.",
       icon: TrainingIcon,
       href: "/services/security-awareness",
     },
@@ -273,10 +299,10 @@ function ServicesSection() {
     <section className="section" style={{ borderRadius: 18 }}>
       <header style={{ textAlign: "center", marginBottom: 18 }}>
         <h2 style={{ margin: 0, fontSize: 30, fontWeight: 900, letterSpacing: 0.2 }}>
-          <span style={{ color: "var(--red)" }}>Unsere</span> Cybersecurity Services
+          <span style={{ color: "var(--red)" }}>Unsere</span> Lerneinheiten
         </h2>
         <p style={{ color: "var(--muted)", marginTop: 8 }}>
-          Modular, verständlich und auf KMU zugeschnitten, kombiniere, was du brauchst.
+          Kurz und klar. Jede Lektion in 10 bis 15 Minuten.
         </p>
       </header>
 
@@ -323,8 +349,9 @@ function ServicesSection() {
             <div style={{ flex: 1 }} />
 
             <div style={{ marginTop: 14 }}>
+              {/* direkte Detailseite pro Lektion */}
               <Link href={s.href} className="btn btn-ghost">
-                Mehr erfahren
+                Lektion ansehen
               </Link>
             </div>
           </article>
@@ -341,16 +368,16 @@ function BenefitsSection() {
   const items = [
     {
       title: "Einfach und verständlich",
-      desc: "Keine Fachsprache, wir erklären und setzen gemeinsam um.",
+      desc: "Keine Fachsprache, wir erklären und üben mit dir.",
       icon: SparkIcon,
     },
     {
       title: "Schnell wirksam",
-      desc: "Mit 2FA, Backups und Updates erreichst du sofort 80 % mehr Schutz.",
+      desc: "Mit 2FA, Backups und Updates erreichst du sofort 80 Prozent mehr Schutz.",
       icon: LightningIcon,
     },
     {
-      title: "Laufende Betreuung",
+      title: "Regelmässige Betreuung",
       desc: "Regelmässige Checks, Reports und klare Empfehlungen.",
       icon: LoopIcon,
     },
@@ -397,20 +424,20 @@ function BenefitsSection() {
 }
 
 /* =========================
-   Prozess
+   Lernpfad
    ========================= */
 function ProcessSection() {
   const steps = [
-    { t: "1. Status prüfen", d: "Kurzer Security Check, 2FA, Backups, Updates, Berechtigungen." },
-    { t: "2. Massnahmen umsetzen", d: "Priorisierte To Dos mit schneller Wirkung, gemeinsam umgesetzt." },
-    { t: "3. Dranbleiben", d: "Monatlicher Mini Report und Empfehlungen, damit es sicher bleibt." },
+    { t: "1 Grundlagen", d: "Kurz und klar in 10 Minuten." },
+    { t: "2 Übungen", d: "Checklisten und kleine Aufgaben mit sofortiger Wirkung." },
+    { t: "3 Quiz und Badges", d: "Teste dein Wissen und sammle Badges." },
   ];
 
   return (
     <section className="section" style={{ borderRadius: 18 }}>
       <header style={{ textAlign: "center", marginBottom: 18 }}>
         <h2 style={{ margin: 0, fontSize: 30, fontWeight: 900 }}>
-          So arbeiten <span style={{ color: "var(--red)" }}>wir</span>
+          So lernst du mit <span style={{ color: "var(--red)" }}>uns</span>
         </h2>
       </header>
 
@@ -471,16 +498,16 @@ function ProcessSection() {
 function FAQSection() {
   const qa = [
     {
-      q: "Brauche ich wirklich 2FA überall",
-      a: "Ja. 2FA verhindert Kontoübernahmen, auch wenn Passwörter geleakt wurden. Start mit E Mail, Cloud Konten und Banking.",
+      q: "Brauche ich wirklich 2FA überall?",
+      a: "Ja. 2FA verhindert Kontoübernahmen, auch wenn Passwörter geleakt wurden. Starte mit E Mail, Cloud Konten und Banking.",
     },
     {
-      q: "Wie oft soll ich Backups testen",
-      a: "Mindestens vierteljährlich. Ein Backup ist nur so gut wie die Wiederherstellung.",
+      q: "Wie oft soll ich Backups testen?",
+      a: "Einmal pro Monat kurz prüfen, ob die Wiederherstellung klappt.",
     },
     {
-      q: "Was kostet das",
-      a: "Modular und fair, du zahlst nur, was du brauchst, für den Start haben wir kleine Pakete.",
+      q: "Wie nutze ich die Lern Demo?",
+      a: "Starte mit Lektion 1 oder gehe direkt zum Quiz.",
     },
   ];
 
@@ -526,7 +553,7 @@ function CTASection() {
       }}
     >
       <h2 style={{ marginTop: 0, fontSize: 30, fontWeight: 900 }}>
-        Bereit, deine Sicherheit zu stärken
+        Bereit, dein Wissen zu stärken?
       </h2>
       <p
         style={{
@@ -536,10 +563,11 @@ function CTASection() {
           marginInline: "auto",
         }}
       >
-        Starte mit einem kurzen, kostenlosen Check und klaren nächsten Schritten.
+        Starte mit Lektion 1 und erhalte einfache Schritte für mehr Sicherheit.
       </p>
-      <a href="/contact" className="btn btn-primary">
-        Unverbindlich anfragen
+      {/* direkte Detailseite Lektion 1 */}
+      <a href="/services/threat-detection" className="btn btn-primary">
+        Jetzt mit Lektion 1 beginnen
       </a>
     </section>
   );

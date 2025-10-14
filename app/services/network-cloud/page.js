@@ -1,227 +1,132 @@
-export const metadata = {
-  title: "Netzwerk & Cloud Sicherheit | Bubble Security",
-  description:
-    "Zero Trust, sichere Konfigurationen in M365, Azure und AWS, Härtung, Segmentierung und laufende Kontrolle.",
-};
+"use client";
 
-export default function NetworkCloudPage() {
+import InfoBox from "../../../components/InfoBox";
+import MiniQuiz from "../../../components/MiniQuiz";
+
+export default function Page() {
+  // Fragen für das Mini-Quiz
+  const questions = [
+    {
+      id: "q1",
+      question:
+        "Was bedeutet wenig Rechte: nur was nötig ist oder alles erlauben?",
+      type: "single",
+      options: ["Nur was nötig ist", "Alles erlauben"],
+      correctIndex: 0,
+      explanation:
+        "Gib nur die Rechte, die wirklich für die Aufgabe gebraucht werden.",
+    },
+    {
+      id: "q2",
+      question: "Soll Basic Auth aktiv bleiben – ja oder nein?",
+      type: "boolean",
+      correctIndex: 1, // Nein
+      explanation:
+        "Nein. Alte Anmeldeverfahren wie Basic Auth abschalten und moderne Methoden nutzen.",
+    },
+    {
+      id: "q3",
+      question:
+        "Welche Faktoren prüft bedingter Zugriff: Identität, Gerät, Ort oder Lieblingsfarbe?",
+      type: "single",
+      options: ["Identität, Gerät, Ort", "Lieblingsfarbe"],
+      correctIndex: 0,
+      explanation:
+        "Bedingter Zugriff bewertet Identität, Gerätezustand und Ort.",
+    },
+  ];
+
   return (
-    <section className="section" style={{ borderRadius: 18, display: "grid", gap: 16 }}>
-      {/* Hero */}
-      <header
-        style={{
-          border: "1px solid rgba(239,68,68,0.35)",
-          borderRadius: 16,
-          padding: 18,
-          background:
-            "linear-gradient(135deg, rgba(239,68,68,0.12), rgba(239,68,68,0.06))",
-        }}
-      >
-        <h2 style={{ margin: 0, fontSize: 26, fontWeight: 900 }}>
-          Netzwerk & Cloud Sicherheit
-        </h2>
-        <p style={{ margin: "6px 0 0", color: "var(--muted)" }}>
-          Zero Trust, sauber konfigurierte Cloud-Dienste und gehärtete Netzwerke.
-          Wir richten sicher ein und halten es einfach pflegbar.
+    <section className="section" style={{ borderRadius: 18 }}>
+      <header style={{ textAlign: "center", marginBottom: 16 }}>
+        <h1 style={{ margin: 0, fontSize: 32, fontWeight: 900 }}>
+          Lektion 2 Netzwerk und Cloud sicher
+        </h1>
+        <p style={{ color: "var(--muted)", marginTop: 8 }}>
+          Baue eine einfache Sicherheitsbasis mit MFA, wenig Rechten und
+          kontrolliertem Zugang.
         </p>
       </header>
 
-      {/* Nutzen */}
-      <article
-        style={{
-          border: "1px solid rgba(255,255,255,0.10)",
-          borderRadius: 14,
-          padding: 16,
-          background: "rgba(255,255,255,0.03)",
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>Dein Mehrwert</h3>
-        <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.7 }}>
-          <li>Weniger Angriffsfläche durch Härtung und Segmentierung</li>
-          <li>Sichere Grundkonfigurationen in M365, Azure und AWS</li>
-          <li>Transparenz durch klare Richtlinien und Reports</li>
-        </ul>
-      </article>
+      <div style={{ display: "grid", gap: 14, maxWidth: 900, margin: "0 auto" }}>
+        <Card title="Ziele">
+          <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6 }}>
+            <li>Prinzip „Wenig Rechte“ verstehen und anwenden</li>
+            <li>MFA für Admin- und Dienstkonten aktivieren</li>
+            <li>Zugriffe von extern prüfen und begrenzen</li>
+          </ul>
+        </Card>
 
-      {/* Leistungsbausteine */}
-      <article
-        style={{
-          border: "1px solid rgba(255,255,255,0.10)",
-          borderRadius: 14,
-          padding: 16,
-          background: "rgba(255,255,255,0.03)",
-          display: "grid",
-          gap: 12,
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>Leistungsbausteine</h3>
-
-        <div
-          style={{
-            display: "grid",
-            gap: 12,
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-          }}
-        >
-          <FeatureCard
-            title="Zero Trust Architektur"
-            points={[
-              "Identitaet als Perimeter, starke Authentisierung",
-              "Least Privilege und saubere Rollen",
-              "Explizit erlauben statt implizit vertrauen",
-            ]}
-          />
-          <FeatureCard
-            title="M365 & Azure Hardening"
-            points={[
-              "Secure Defaults und Baselines",
-              "Conditional Access, MFA, App-Schutz",
-              "Exchange/SharePoint/Teams Richtlinien",
-            ]}
-          />
-          <FeatureCard
-            title="AWS Baseline"
-            points={[
-              "IAM sauber aufsetzen und trennen",
-              "Security Hub, GuardDuty, CloudTrail",
-              "S3/VPC Best Practices und Verschluesselung",
-            ]}
-          />
-          <FeatureCard
-            title="Netzwerk Segmentierung"
-            points={[
-              "Trennung nach Zonen und Schutzbedarf",
-              "Firewall Regeln auf das Noetigste",
-              "VPN, Remotezugriff und Gast-Netz sauber",
-            ]}
-          />
-          <FeatureCard
-            title="Identity & Access"
-            points={[
-              "RBAC/ABAC, Gruppen und Rollen konsistent",
-              "Privileged Access Workflows",
-              "Rezertifizierung und saubere Aufloesung",
-            ]}
-          />
-          <FeatureCard
-            title="Kontinuierliche Kontrolle"
-            points={[
-              "Konfig-Drift erkennen und beheben",
-              "Security Scorecards & Kurzreports",
-              "Automatisierte Checks wo sinnvoll",
-            ]}
-          />
-        </div>
-      </article>
-
-      {/* Vorgehen */}
-      <article
-        style={{
-          border: "1px solid rgba(255,255,255,0.10)",
-          borderRadius: 14,
-          padding: 16,
-          background: "rgba(255,255,255,0.03)",
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>So gehen wir vor</h3>
-        <ol style={{ margin: 0, paddingLeft: 18, lineHeight: 1.8 }}>
-          <li>Ist-Stand aufnehmen: Identitaet, Cloud, Netzwerk</li>
-          <li>Härtung und Basis-Richtlinien definieren</li>
-          <li>Umsetzen und automatisieren, wo moeglich</li>
-          <li>Uebergabe, Dokumentation und kurze Schulung</li>
-        </ol>
-      </article>
-
-      {/* FAQ */}
-      <article
-        style={{
-          border: "1px solid rgba(255,255,255,0.10)",
-          borderRadius: 14,
-          padding: 16,
-          background: "rgba(255,255,255,0.03)",
-          display: "grid",
-          gap: 10,
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>Haeufige Fragen</h3>
-
-        <details style={detailsStyle}>
-          <summary style={summaryStyle}>Machen wir alles auf einmal</summary>
-          <p style={{ marginTop: 8, color: "var(--muted)" }}>
-            Nein. Wir starten mit den groessten Hebeln: Identitaet, MFA,
-            Zugriffsregeln, wichtigste Cloud-Dienste. Danach iterativ weiter.
+        <Card title="Kernwissen in 60 Sekunden">
+          <p style={{ margin: 0, color: "var(--muted)" }}>
+            Zero Trust bedeutet: Jede Anfrage wird geprüft. Wichtige Faktoren sind
+            Identität, Gerät und Ort. Alte Anmeldungen wie Basic Auth abschalten.
+            Adminrechte trennen und nur zeitlich vergeben. Bedingter Zugriff hilft,
+            riskante Logins zu blockieren.
           </p>
-        </details>
+        </Card>
 
-        <details style={detailsStyle}>
-          <summary style={summaryStyle}>Brauchen wir neue Tools</summary>
-          <p style={{ marginTop: 8, color: "var(--muted)" }}>
-            Oft reichen vorhandene Lizenzen. Wir ergaenzen nur dort,
-            wo es echten Mehrwert bringt.
-          </p>
-        </details>
+        <InfoBox variant="tipp" title="Tipp: Schnelle Basis">
+          MFA überall einschalten, getrennte Adminkonten nutzen und Protokollierung
+          aktivieren. Das bringt sofort viel Schutz.
+        </InfoBox>
 
-        <details style={detailsStyle}>
-          <summary style={summaryStyle}>Wie bleibt es dauerhaft sicher</summary>
-          <p style={{ marginTop: 8, color: "var(--muted)" }}>
-            Mit Baselines, einfachen Prozessen und kleinen,
-            regelmaessigen Kontrollen verhindern wir Drift.
-          </p>
-        </details>
-      </article>
+        <InfoBox variant="beispiel" title="Beispiel: Offener Port">
+          Ein offener RDP-Port am Router wird missbraucht. Lösung: Fernzugriff
+          entfernen oder nur über ein sicheres Gateway mit MFA erlauben.
+        </InfoBox>
 
-      {/* CTA */}
-      <footer
-        className="section"
-        style={{
-          borderRadius: 16,
-          textAlign: "center",
-          border: "1px solid rgba(239,68,68,0.35)",
-          background:
-            "linear-gradient(135deg, rgba(239,68,68,0.14), rgba(239,68,68,0.06))",
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>
-          Willst du eine schnelle Cloud- und Netzwerk-Sichtung
-        </h3>
-        <p style={{ marginTop: 0, color: "var(--muted)" }}>
-          Wir liefern ein kurzes Lagebild und einen klaren 30-Tage-Plan
-          mit wenigen, wirksamen Schritten.
-        </p>
-        <a href="/contact" className="btn btn-primary">Unverbindlich anfragen</a>
-      </footer>
+        <Card title="Praxis in 10 Minuten">
+          <ol style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6 }}>
+            <li>MFA für alle Adminkonten einschalten</li>
+            <li>
+              Liste globaler Berechtigungen exportieren und unnötige Rechte entfernen
+            </li>
+            <li>Offene Ports am Router prüfen und nur das Nötige erlauben</li>
+          </ol>
+        </Card>
+
+        <Card title="Checkliste Baseline">
+          <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6 }}>
+            <li>Keine gemeinsamen Adminkonten</li>
+            <li>Eigene Dienstidentität pro System</li>
+            <li>Protokollierung aktiv bei Anmeldungen und Adminaktionen</li>
+            <li>Konfig-Backup von Router und Cloud anlegen</li>
+          </ul>
+        </Card>
+
+        <Card title="Mini-Quiz: 3 Fragen">
+          <MiniQuiz questions={questions} />
+        </Card>
+
+        <Nav prev="/services/threat-detection" next="/services/data-protection" />
+      </div>
     </section>
   );
 }
 
-function FeatureCard({ title, points }) {
+function Card({ title, children }) {
   return (
-    <div
+    <article
       style={{
-        border: "1px solid rgba(255,255,255,0.10)",
-        borderRadius: 12,
-        padding: 14,
-        background: "#111",
+        borderRadius: 14,
+        border: "1px solid rgba(255,255,255,0.08)",
+        padding: 16,
+        background:
+          "linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02))",
       }}
     >
-      <div style={{ fontWeight: 800, marginBottom: 8 }}>{title}</div>
-      <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6 }}>
-        {points.map((p) => (
-          <li key={p}>{p}</li>
-        ))}
-      </ul>
-    </div>
+      <h2 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 800 }}>{title}</h2>
+      {children}
+    </article>
   );
 }
 
-const detailsStyle = {
-  background: "#111",
-  border: "1px solid rgba(255,255,255,0.08)",
-  borderRadius: 12,
-  padding: 12,
-};
-
-const summaryStyle = {
-  cursor: "pointer",
-  fontWeight: 700,
-};
+function Nav({ prev, next }) {
+  return (
+    <div style={{ display: "flex", gap: 12, justifyContent: "space-between" }}>
+      <a href={prev} className="btn btn-ghost">Vorherige Lektion</a>
+      <a href={next} className="btn btn-primary">Nächste Lektion</a>
+    </div>
+  );
+}

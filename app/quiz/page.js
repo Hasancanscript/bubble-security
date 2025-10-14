@@ -5,9 +5,9 @@ import { useEffect, useRef, useState } from "react";
 /**
  * 15 Fragen jeweils:
  * - q: Frage
- * - options: Antwortmoeglichkeiten
+ * - options: Antwortmöglichkeiten
  * - correct: Index der richtigen Antwort
- * - explain: kurze Erklaerung
+ * - explain: kurze Erklärung
  */
 const QUESTIONS = [
   {
@@ -19,7 +19,7 @@ const QUESTIONS = [
     ],
     correct: 0,
     explain:
-      "Ransomware verschluesselt Dateien und fordert Loesegeld. Schutz: Offline Backups, Updates, keine unbekannten Anhaenge oeffnen.",
+      "Ransomware verschluesselt Dateien und fordert Lösegeld. Schutz: Offline Backups, Updates, keine unbekannten Anhaenge öffnen.",
   },
   {
     q: "Social Engineering ist ...",
@@ -30,7 +30,7 @@ const QUESTIONS = [
     ],
     correct: 0,
     explain:
-      "Angreifer nutzen psychologische Tricks (z. B. falsche Dringlichkeit), um Passwoerter oder interne Infos zu erlangen.",
+      "Angreifer nutzen psychologische Tricks (z. B. falsche Dringlichkeit), um Passwörter oder interne Infos zu erlangen.",
   },
   {
     q: "Was ist ein sicheres Passwort?",
@@ -41,12 +41,12 @@ const QUESTIONS = [
     ],
     correct: 1,
     explain:
-      "Lange, zufaellige Passwoerter sind am sichersten. Nutze einen Passwort Manager fuer unterschiedliche Logins.",
+      "Lange, zufaellige Passwörter sind am sichersten. Nutze einen Passwort Manager fuer unterschiedliche Logins.",
   },
   {
     q: "Warum 2 Faktor Authentisierung (2FA)?",
     options: [
-      "Sie ersetzt Passwoerter vollstaendig",
+      "Sie ersetzt Passwörter vollstaendig",
       "Sie fuegt eine zusaetzliche Sicherheitsebene hinzu",
       "Sie macht Geraete schneller",
     ],
@@ -64,7 +64,7 @@ const QUESTIONS = [
   {
     q: "Woran erkennst du haeufig Phishing?",
     options: [
-      "Absender Adresse, Rechtschreibfehler, ungewoehnliche Links",
+      "Absender Adresse, Rechtschreibfehler, ungewöhnliche Links",
       "Immer an einem roten Logo",
       "Phishing kommt nur per SMS",
     ],
@@ -88,28 +88,28 @@ const QUESTIONS = [
     options: [
       "nur optische Updates",
       "regelmaessige Sicherheits Updates fuer Systeme/Software",
-      "Backups loeschen",
+      "Backups löschen",
     ],
     correct: 1,
     explain:
-      "Sicherheitsluecken werden durch Updates geschlossen. Automatisiere Updates, wenn moeglich.",
+      "Sicherheitsluecken werden durch Updates geschlossen. Automatisiere Updates, wenn möglich.",
   },
   {
     q: "Was ist ein Passwort Manager?",
     options: [
-      "Ein Tool, das Passwoerter speichert und starke generiert",
+      "Ein Tool, das Passwörter speichert und starke generiert",
       "Eine Excel Liste auf dem Desktop",
       "Ein Browser Lesezeichen",
     ],
     correct: 0,
     explain:
-      "Passwort Manager erstellt und speichert komplexe, einzigartige Passwoerter verschluesselt.",
+      "Passwort Manager erstellt und speichert komplexe, einzigartige Passwörter verschluesselt.",
   },
   {
     q: "Wofuer steht Least Privilege?",
     options: [
       "Alle bekommen Admin Rechte",
-      "Jede Person bekommt nur die minimal noetigen Rechte",
+      "Jede Person bekommt nur die minimal nötigen Rechte",
       "Niemand darf etwas",
     ],
     correct: 1,
@@ -121,21 +121,21 @@ const QUESTIONS = [
     options: ["Rechnung.pdf", "Urlaub.jpg", "Bewerbung.pdf.exe"],
     correct: 2,
     explain:
-      "Doppelte Endungen tarnen ausfuehrbare Dateien (.exe). Niemals oeffnen, sofort loeschen/melden.",
+      "Doppelte Endungen tarnen ausfuehrbare Dateien (.exe). Niemals öffnen, sofort löschen/melden.",
   },
   {
     q: "Was bedeutet MFA?",
     options: ["Multi Faktor Authentisierung", "Multi File Archiv", "Mega Fast Access"],
     correct: 0,
     explain:
-      "MFA = mehrere Faktoren (Wissen, Besitz, Biometrie). Hoehere Sicherheit als nur Passwort.",
+      "MFA = mehrere Faktoren (Wissen, Besitz, Biometrie). Höhere Sicherheit als nur Passwort.",
   },
   {
-    q: "Wie schuetzt du dich im oeffentlichen WLAN?",
+    q: "Wie schuetzt du dich im öffentlichen WLAN?",
     options: [
       "Kein HTTPS verwenden",
       "VPN nutzen und nur verschluesselte Seiten (HTTPS) aufrufen",
-      "Alle Passwoerter ueberall gleich verwenden",
+      "Alle Passwörter ueberall gleich verwenden",
     ],
     correct: 1,
     explain:
@@ -208,7 +208,7 @@ function getResult(score, total) {
       text:
         "Du bist sicher unterwegs. Mit ein paar Tweaks erreichst du ein sehr gutes Sicherheitsniveau.",
       tips: [
-        "Passwort Manager ueberall nutzen und alte Passwoerter ersetzen",
+        "Passwort Manager ueberall nutzen und alte Passwörter ersetzen",
         "2FA lueckenlos aktivieren",
         "Kurztrainings/Phishing Checks regelmaessig einplanen",
       ],
@@ -237,7 +237,7 @@ function getResult(score, total) {
     text:
       "Mit drei Basics hebst du deine Sicherheit sofort deutlich an. Fang klein an, aber konsequent.",
     tips: [
-      "Passwort Manager einfuehren und starke Passwoerter nutzen",
+      "Passwort Manager einfuehren und starke Passwörter nutzen",
       "2FA wirklich ueberall einschalten",
       "Auto Updates aktivieren (System und Apps)",
     ],
@@ -259,7 +259,7 @@ function ConfettiBurst({ run = false, duration = 1800 }) {
 
     const resize = () => {
       const w = canvas.parentElement.clientWidth;
-      const h = 220; // genug Hoehe fuer Burst im Ergebnis
+      const h = 220; // genug Höhe fuer Burst im Ergebnis
       canvas.width = Math.floor(w * dpr);
       canvas.height = Math.floor(h * dpr);
       canvas.style.width = `${w}px`;
@@ -364,7 +364,7 @@ export default function QuizPage() {
 
     return (
       <main className="section" style={{ maxWidth: 900, margin: "24px auto", position: "relative", overflow: "hidden" }}>
-        {/* Konfetti nur fuer Pro und Hero */}
+        {/* Konfetti nur für Pro und Hero */}
         <ConfettiBurst run={res.confetti} />
 
         <h1 style={{ marginTop: 0, color: "var(--red)" }}>Dein Ergebnis</h1>
@@ -523,7 +523,7 @@ export default function QuizPage() {
           className="btn btn-ghost"
           style={{ opacity: step === 0 ? 0.5 : 1 }}
         >
-          Zurueck
+          Zurück
         </button>
 
         <div style={{ display: "flex", gap: 10 }}>

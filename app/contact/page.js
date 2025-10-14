@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useRef, useState, cloneElement } from "react";
 
 export default function ContactPage() {
-  // Logo Groesse in px (kannst du anpassen)
+  // Logo Grösse in px (kannst du anpassen)
   const LOGO_SIZE = 200;
 
   const [values, setValues] = useState({

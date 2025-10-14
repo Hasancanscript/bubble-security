@@ -1,208 +1,131 @@
-export default function ThreatDetectionPage() {
+"use client";
+
+import InfoBox from "../../../components/InfoBox";
+import MiniQuiz from "../../../components/MiniQuiz";
+
+export default function Page() {
+  // Fragen für das Mini-Quiz
+  const questions = [
+    {
+      id: "q1",
+      question:
+        "Welches Signal ist typisch für Phishing: Druck, ungewohnter Absender oder beides?",
+      type: "single",
+      options: ["Druck", "Ungewohnter Absender", "Beides"],
+      correctIndex: 2,
+      explanation:
+        "Phishing kombiniert oft Zeitdruck mit einer merkwürdigen Absenderadresse.",
+    },
+    {
+      id: "q2",
+      question:
+        "Soll man bei Verdacht das Gerät sofort formatieren – ja oder nein?",
+      type: "boolean",
+      correctIndex: 1, // Nein
+      explanation:
+        "Nein. Erst trennen, sichern und melden – sonst gehen Spuren verloren.",
+    },
+    {
+      id: "q3",
+      question:
+        "Was prüfst du zuerst bei einem Link: die Domain oder die Farbe des Buttons?",
+      type: "single",
+      options: ["Die Domain", "Die Farbe des Buttons"],
+      correctIndex: 0,
+      explanation: "Die Domain zeigt, wohin der Link wirklich führt.",
+    },
+  ];
+
   return (
-    <>
-      {/* Hero */}
-      <header
-        style={{
-          border: "1px solid rgba(239,68,68,0.35)",
-          borderRadius: 16,
-          padding: 18,
-          background:
-            "linear-gradient(135deg, rgba(239,68,68,0.12), rgba(239,68,68,0.06))",
-        }}
-      >
-        <h2 style={{ margin: 0, fontSize: 26, fontWeight: 900 }}>
-          Bedrohungserkennung und Reaktion
-        </h2>
-        <p style={{ margin: "6px 0 0", color: "var(--muted)" }}>
-          Wir erkennen Angriffe früh und reagieren strukturiert. Von der ersten
-          Alarmierung bis zur Eindämmung.
+    <section className="section" style={{ borderRadius: 18 }}>
+      <header style={{ textAlign: "center", marginBottom: 16 }}>
+        <h1 style={{ margin: 0, fontSize: 32, fontWeight: 900 }}>
+          Lektion 1 Bedrohungen erkennen
+        </h1>
+        <p style={{ color: "var(--muted)", marginTop: 8 }}>
+          Erkenne Phishing, Malware und Kontoübernahmen. Lerne, was du in den
+          ersten 15 Minuten tun sollst.
         </p>
       </header>
 
-      {/* Nutzen */}
-      <article
-        style={{
-          border: "1px solid rgba(255,255,255,0.10)",
-          borderRadius: 14,
-          padding: 16,
-          background: "rgba(255,255,255,0.03)",
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>Dein Mehrwert</h3>
-        <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.7 }}>
-          <li>Frühe Erkennung statt späte Schadensbegrenzung</li>
-          <li>Klare Schritte bei Vorfall und geringere Ausfallzeit</li>
-          <li>Transparente Lage und verständliche Reports</li>
-        </ul>
-      </article>
+      <div style={{ display: "grid", gap: 14, maxWidth: 900, margin: "0 auto" }}>
+        <Card title="Ziele">
+          <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6 }}>
+            <li>Phishing-Merkmale sicher erkennen</li>
+            <li>Verdacht richtig melden und abgrenzen</li>
+            <li>Erste Schritte der Eindämmung durchführen</li>
+          </ul>
+        </Card>
 
-      {/* Leistungen */}
-      <article
-        style={{
-          border: "1px solid rgba(255,255,255,0.10)",
-          borderRadius: 14,
-          padding: 16,
-          background: "rgba(255,255,255,0.03)",
-          display: "grid",
-          gap: 12,
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>Leistungsbausteine</h3>
-
-        <div
-          style={{
-            display: "grid",
-            gap: 12,
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-          }}
-        >
-          <FeatureCard
-            title="Monitoring rund um die Uhr"
-            points={[
-              "Log- und Event-Sammlung aus wichtigen Systemen",
-              "Erkennung von Anomalien und bekannten Mustern",
-              "Alarme mit Kontext statt Rauschen",
-            ]}
-          />
-          <FeatureCard
-            title="Alarmierung und Ersthilfe"
-            points={[
-              "Weg vom Hinweis zum Ticket ist kurz",
-              "Erste Einordnung und Handlungsempfehlung",
-              "Unterstützung beim Sammeln von Fakten",
-            ]}
-          />
-          <FeatureCard
-            title="Incident Response"
-            points={[
-              "Eindämmen, Ursachen finden, beheben",
-              "Forensik so weit wie nötig und sinnvoll",
-              "Lernpunkte und Abschlussbericht",
-            ]}
-          />
-          <FeatureCard
-            title="Harte Fakten und Übung"
-            points={[
-              "Runbooks für typische Lagen",
-              "Tabletop Übungen im Team",
-              "Kennzahlen und Reifegrad Übersicht",
-            ]}
-          />
-        </div>
-      </article>
-
-      {/* Vorgehen */}
-      <article
-        style={{
-          border: "1px solid rgba(255,255,255,0.10)",
-          borderRadius: 14,
-          padding: 16,
-          background: "rgba(255,255,255,0.03)",
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>So laufen Einsätze</h3>
-        <ol style={{ margin: 0, paddingLeft: 18, lineHeight: 1.8 }}>
-          <li>Signal kommt rein, wir prüfen Quelle und Relevanz</li>
-          <li>Eindämmung starten, Zugriffe trennen, Risiken senken</li>
-          <li>Analyse, Spuren sichern, Ursache finden</li>
-          <li>Beheben, Wiederanlauf planen und umsetzen</li>
-          <li>Lernen, Massnahmen und kurze Schulung im Team</li>
-        </ol>
-      </article>
-
-      {/* FAQ */}
-      <article
-        style={{
-          border: "1px solid rgba(255,255,255,0.10)",
-          borderRadius: 14,
-          padding: 16,
-          background: "rgba(255,255,255,0.03)",
-          display: "grid",
-          gap: 10,
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>Häufige Fragen</h3>
-
-        <details style={detailsStyle}>
-          <summary style={summaryStyle}>Welche Systeme binden wir an</summary>
-          <p style={{ marginTop: 8, color: "var(--muted)" }}>
-            Start mit Identität, Mail, Endgeräte, Netzwerk und Cloud. Wir
-            priorisieren nach Risiko und Aufwand.
+        <Card title="Kernwissen in 60 Sekunden">
+          <p style={{ margin: 0, color: "var(--muted)" }}>
+            Typische Phishing-Signale sind Druck, eine ungewohnte Absenderadresse
+            und ein Link, der auf eine nur ähnlich aussehende Domain führt.
+            Unbekannte Anhänge und Makros nicht öffnen. Bei Kontoübernahme sind
+            Anzeichen zum Beispiel Login-Meldungen ohne eigenes Zutun, neuer Ort
+            oder neues Gerät.
           </p>
-        </details>
+        </Card>
 
-        <details style={detailsStyle}>
-          <summary style={summaryStyle}>Wie schnell ist Hilfe verfügbar</summary>
-          <p style={{ marginTop: 8, color: "var(--muted)" }}>
-            Wir bieten Bereitschaft nach Vereinbarung. In der Regel erhalten
-            Kunden noch am gleichen Tag Unterstützung.
-          </p>
-        </details>
+        <InfoBox variant="achtung" title="Achtung: Häufiger Trick">
+          Zeitdruck und eine gefälschte Login-Seite. Pausiere kurz und prüfe
+          Domain und Absenderadresse. Keine Anhänge öffnen, bevor du sicher bist.
+        </InfoBox>
 
-        <details style={detailsStyle}>
-          <summary style={summaryStyle}>Braucht es grosse Technik</summary>
-          <p style={{ marginTop: 8, color: "var(--muted)" }}>
-            Nein, wir nutzen vorhandene Mittel und ergänzen nur, was wirklich
-            fehlt. Fokus auf einfache, stabile Lösungen.
-          </p>
-        </details>
-      </article>
+        <InfoBox variant="tipp" title="Tipp: Link sicher prüfen">
+          Mit Mouseover die Zieladresse lesen. In Apps die Adresse manuell in die
+          Adresszeile eingeben, statt auf den Link zu tippen.
+        </InfoBox>
 
-      {/* CTA */}
-      <footer
-        className="section"
-        style={{
-          borderRadius: 16,
-          textAlign: "center",
-          border: "1px solid rgba(239,68,68,0.35)",
-          background:
-            "linear-gradient(135deg, rgba(239,68,68,0.14), rgba(239,68,68,0.06))",
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>
-          Willst du ein kurzes Lagebild für dein Team
-        </h3>
-        <p style={{ marginTop: 0, color: "var(--muted)" }}>
-          Wir starten mit einem kompakten Check und einem klaren Plan für die
-          ersten Schritte.
-        </p>
-        <a href="/contact" className="btn btn-primary">
-          Unverbindlich anfragen
-        </a>
-      </footer>
-    </>
+        <Card title="Praxis in 10 Minuten">
+          <ol style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6 }}>
+            <li>Link prüfen und Domain mit der echten Firma vergleichen</li>
+            <li>Auffällige Absenderadresse notieren, z. B. support@firmadomain</li>
+            <li>Screenshot machen, nicht weiterleiten, an den Security-Kontakt melden</li>
+          </ol>
+        </Card>
+
+        <Card title="Checkliste bei akutem Verdacht">
+          <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6 }}>
+            <li>Internetverbindung trennen, WLAN aus</li>
+            <li>Passwort ändern und 2FA aktivieren</li>
+            <li>Gerät nicht ausschalten, Evidenz erhalten</li>
+            <li>Vorfall melden mit Uhrzeit und kurzem Kontext</li>
+          </ul>
+        </Card>
+
+        <Card title="Mini-Quiz: 3 Fragen">
+          <MiniQuiz questions={questions} />
+        </Card>
+
+        <Nav next="/services/network-cloud" />
+      </div>
+    </section>
   );
 }
 
-function FeatureCard({ title, points }) {
+function Card({ title, children }) {
   return (
-    <div
+    <article
       style={{
-        border: "1px solid rgba(255,255,255,0.10)",
-        borderRadius: 12,
-        padding: 14,
-        background: "#111",
+        borderRadius: 14,
+        border: "1px solid rgba(255,255,255,0.08)",
+        padding: 16,
+        background:
+          "linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02))",
       }}
     >
-      <div style={{ fontWeight: 800, marginBottom: 8 }}>{title}</div>
-      <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6 }}>
-        {points.map((p) => (
-          <li key={p}>{p}</li>
-        ))}
-      </ul>
+      <h2 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 800 }}>{title}</h2>
+      {children}
+    </article>
+  );
+}
+
+function Nav({ next }) {
+  return (
+    <div style={{ display: "flex", gap: 12, justifyContent: "space-between" }}>
+      <span />
+      <a href={next} className="btn btn-primary">Nächste Lektion</a>
     </div>
   );
 }
-
-const detailsStyle = {
-  background: "#111",
-  border: "1px solid rgba(255,255,255,0.08)",
-  borderRadius: 12,
-  padding: 12,
-};
-
-const summaryStyle = {
-  cursor: "pointer",
-  fontWeight: 700,
-};

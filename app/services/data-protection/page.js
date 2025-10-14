@@ -1,232 +1,130 @@
-export const metadata = {
-  title: "Daten- und Inhaltsschutz | Bubble Security",
-  description:
-    "DLP, Verschluesselung und Richtlinien – damit sensible Informationen geschuetzt bleiben.",
-};
+"use client";
 
-export default function DataProtectionPage() {
+import InfoBox from "../../../components/InfoBox";
+import MiniQuiz from "../../../components/MiniQuiz"; // falls deine Datei MiniQuiz.js heisst -> "../../../components/MiniQuiz"
+
+export default function Page() {
+  // Fragen für das Mini-Quiz
+  const questions = [
+    {
+      id: "q1",
+      question:
+        "Wozu dienen Labels: Nutzung und Schutz festlegen oder nur Farben ändern?",
+      type: "single",
+      options: ["Nutzung und Schutz festlegen", "Nur Farben ändern"],
+      correctIndex: 0,
+      explanation:
+        "Labels legen Regeln fest, zum Beispiel wer lesen darf, ob Teilen erlaubt ist oder ob Verschlüsselung nötig ist.",
+    },
+    {
+      id: "q2",
+      question: "Ist ein Backup ohne Test zuverlässig – ja oder nein?",
+      type: "boolean",
+      correctIndex: 1, // Nein
+      explanation:
+        "Nein. Backups sind nur dann wertvoll, wenn die Wiederherstellung regelmässig getestet wird.",
+    },
+    {
+      id: "q3",
+      question:
+        "Welche Daten gelten als sensibel: Kundenliste oder Wetterdaten?",
+      type: "single",
+      options: ["Kundenliste", "Wetterdaten"],
+      correctIndex: 0,
+      explanation:
+        "Kundenlisten enthalten persönliche oder geschäftliche Informationen und sind sensibel.",
+    },
+  ];
+
   return (
-    <section className="section" style={{ borderRadius: 18, display: "grid", gap: 16 }}>
-      {/* Hero */}
-      <header
-        style={{
-          border: "1px solid rgba(239,68,68,0.35)",
-          borderRadius: 16,
-          padding: 18,
-          background:
-            "linear-gradient(135deg, rgba(239,68,68,0.12), rgba(239,68,68,0.06))",
-        }}
-      >
-        <h2 style={{ margin: 0, fontSize: 26, fontWeight: 900 }}>
-          Daten- und Inhaltsschutz
-        </h2>
-        <p style={{ margin: "6px 0 0", color: "var(--muted)" }}>
-          Schuetze vertrauliche Informationen mit klaren Richtlinien, Verschluesselung
-          und DLP – pragmatisch und alltagstauglich.
+    <section className="section" style={{ borderRadius: 18 }}>
+      <header style={{ textAlign: "center", marginBottom: 16 }}>
+        <h1 style={{ margin: 0, fontSize: 32, fontWeight: 900 }}>
+          Lektion 3 Daten und Inhalte schützen
+        </h1>
+        <p style={{ color: "var(--muted)", marginTop: 8 }}>
+          Verstehe DLP, Verschlüsselung, Labels und sichere Freigaben in wenigen Schritten.
         </p>
       </header>
 
-      {/* Nutzen */}
-      <article
-        style={{
-          border: "1px solid rgba(255,255,255,0.10)",
-          borderRadius: 14,
-          padding: 16,
-          background: "rgba(255,255,255,0.03)",
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>Dein Mehrwert</h3>
-        <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.7 }}>
-          <li>Wissen, wo sensible Daten liegen und wer Zugriff hat</li>
-          <li>Automatische Schutzmassnahmen statt nur Appelle</li>
-          <li>Nachweisbare Compliance und weniger Leaks</li>
-        </ul>
-      </article>
+      <div style={{ display: "grid", gap: 14, maxWidth: 900, margin: "0 auto" }}>
+        <Card title="Ziele">
+          <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6 }}>
+            <li>Sensible Daten erkennen und einteilen</li>
+            <li>Schutzlabels sinnvoll einsetzen</li>
+            <li>Einen einfachen Backup-Plan aufsetzen</li>
+          </ul>
+        </Card>
 
-      {/* Leistungsbausteine */}
-      <article
-        style={{
-          border: "1px solid rgba(255,255,255,0.10)",
-          borderRadius: 14,
-          padding: 16,
-          background: "rgba(255,255,255,0.03)",
-          display: "grid",
-          gap: 12,
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>Leistungsbausteine</h3>
-
-        <div
-          style={{
-            display: "grid",
-            gap: 12,
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-          }}
-        >
-          <FeatureCard
-            title="Datenklassifizierung"
-            points={[
-              "Einfaches Schema: oeffentlich intern vertraulich streng",
-              "Kennzeichnung in M365 Google Workspace u. a.",
-              "Automatische Regeln fuer Freigaben und Versand",
-            ]}
-          />
-          <FeatureCard
-            title="DLP – Data Loss Prevention"
-            points={[
-              "Erkennen von sensiblen Inhalten wie IBAN Perso Kundendaten",
-              "Blockieren oder Quarantaene bei Regelverstoessen",
-              "Anwenderfreundliche Hinweise statt harter Stopps",
-            ]}
-          />
-          <FeatureCard
-            title="Verschluesselung und Rechte"
-            points={[
-              "Datei- und E-Mail-Verschluesselung wo sinnvoll",
-              "Labels steuern Zugriffe automatisch",
-              "Gastzugriffe zeitlich begrenzen und protokollieren",
-            ]}
-          />
-          <FeatureCard
-            title="Sichere Zusammenarbeit"
-            points={[
-              "Freigabe-Policies fuer Teams SharePoint Drive",
-              "Externe Zusammenarbeit kontrolliert ermoeglichen",
-              "Aufraeum- und Review-Workflows",
-            ]}
-          />
-          <FeatureCard
-            title="Audits und Nachweise"
-            points={[
-              "Protokolle und Reports fuer Revision und DSG",
-              "Warnmeldungen bei untypischem Verhalten",
-              "Dashboards fuer Management und IT",
-            ]}
-          />
-          <FeatureCard
-            title="Schulung & Starthilfen"
-            points={[
-              "Kompakte Leitfaeden und In-App-Tipps",
-              "Team-Sessions mit typischen Praxissituationen",
-              "Vorlagen fuer Richtlinien und Prozesse",
-            ]}
-          />
-        </div>
-      </article>
-
-      {/* Praxisleitfaden */}
-      <article
-        style={{
-          border: "1px solid rgba(255,255,255,0.10)",
-          borderRadius: 14,
-          padding: 16,
-          background: "rgba(255,255,255,0.03)",
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>Pragmatischer Fahrplan</h3>
-        <ol style={{ margin: 0, paddingLeft: 18, lineHeight: 1.8 }}>
-          <li>Datenarten und Schutzziele festlegen – einfaches Label-Schema</li>
-          <li>Kritische Speicherorte identifizieren – Mail Cloud Freigaben</li>
-          <li>Basisregeln aktivieren – Freigabe Limits Gastzugriffe Reviews</li>
-          <li>DLP-Policies pilotieren – Hinweise statt Blocken wo moeglich</li>
-          <li>Verschluesselung fuer hochsensible Bereiche aktivieren</li>
-          <li>Schulung und Kurzleitfaeden fuer Teams bereitstellen</li>
-          <li>Regelmaessige Reports und Nachjustierung</li>
-        </ol>
-      </article>
-
-      {/* FAQ */}
-      <article
-        style={{
-          border: "1px solid rgba(255,255,255,0.10)",
-          borderRadius: 14,
-          padding: 16,
-          background: "rgba(255,255,255,0.03)",
-          display: "grid",
-          gap: 10,
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>Haeufige Fragen</h3>
-
-        <details style={detailsStyle}>
-          <summary style={summaryStyle}>Brauchen wir sofort komplexe DLP Loesungen</summary>
-          <p style={{ marginTop: 8, color: "var(--muted)" }}>
-            Nein. Wir starten mit Labels und einfachen Regeln. DLP wird schrittweise
-            eingefuehrt und so konfiguriert, dass es den Alltag unterstuetzt.
+        <Card title="Kernwissen in 60 Sekunden">
+          <p style={{ margin: 0, color: "var(--muted)" }}>
+            Sensible Daten sind zum Beispiel Kundenlisten, Verträge und Gesundheitsdaten.
+            Labels legen fest, wie Inhalte genutzt und geteilt werden.
+            Verschlüsselung schützt Geräte und Dateien vor Einsicht.
           </p>
-        </details>
+        </Card>
 
-        <details style={detailsStyle}>
-          <summary style={summaryStyle}>Wie verhindern wir Frust bei Mitarbeitenden</summary>
-          <p style={{ marginTop: 8, color: "var(--muted)" }}>
-            Hinweise statt Blocken wo moeglich, sinnvolle Ausnahmen und klare Erklaerungen.
-            Kurze Trainings mit Praxisbeispielen helfen spuerbar.
-          </p>
-        </details>
+        {/* Infokästen */}
+        <InfoBox variant="tipp" title="Tipp: Schnelle Basis">
+          Nutze zwei einfache Labels: „intern“ und „vertraulich“. Teile standardmässig nur mit
+          einzelnen Personen und setze bei externen Freigaben ein Ablaufdatum.
+        </InfoBox>
 
-        <details style={detailsStyle}>
-          <summary style={summaryStyle}>Funktioniert das auch mit externen Partnern</summary>
-          <p style={{ marginTop: 8, color: "var(--muted)" }}>
-            Ja. Gastzugriffe lassen sich zeitlich begrenzen und protokollieren. Freigaben
-            koennen automatisch ueberprueft und bei Bedarf entzogen werden.
-          </p>
-        </details>
-      </article>
+        <InfoBox variant="beispiel" title="Beispiel: Falsche Freigabe">
+          Eine Datei wurde „öffentlich“ geteilt. Lösung: Teilen beenden, neuen Link nur für
+          bestimmte Personen setzen und optional „Nur Lesen“ mit Ablaufdatum aktivieren.
+        </InfoBox>
 
-      {/* CTA */}
-      <footer
-        className="section"
-        style={{
-          borderRadius: 16,
-          textAlign: "center",
-          border: "1px solid rgba(239,68,68,0.35)",
-          background:
-            "linear-gradient(135deg, rgba(239,68,68,0.14), rgba(239,68,68,0.06))",
-        }}
-      >
-        <h3 style={{ marginTop: 0, fontWeight: 900 }}>
-          Willst du sensible Daten gezielt und sichtbar schuetzen
-        </h3>
-        <p style={{ marginTop: 0, color: "var(--muted)" }}>
-          Wir starten mit einem schlanken Setup, das sofort Wirkung zeigt – ohne
-          Komplexitaetsfalle.
-        </p>
-        <a href="/contact" className="btn btn-primary">Unverbindlich anfragen</a>
-      </footer>
+        <Card title="Praxis in 10 Minuten">
+          <ol style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6 }}>
+            <li>Zwei Schutzlabels anlegen: „vertraulich“ und „intern“</li>
+            <li>DLP-Regel für Kreditkartenmuster testen</li>
+            <li>Eine Wiederherstellung aus dem Backup durchführen</li>
+          </ol>
+        </Card>
+
+        <Card title="Checkliste Basisschutz">
+          <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6 }}>
+            <li>Volle Festplattenverschlüsselung aktiv</li>
+            <li>Freigaben nur mit gezielten Personen</li>
+            <li>Teilen mit Ablaufdatum und ohne öffentlich</li>
+            <li>Backup nach dem 3-2-1-Prinzip speichern</li>
+          </ul>
+        </Card>
+
+        <Card title="Mini-Quiz: 3 Fragen">
+          {/* Interaktives Quiz */}
+          <MiniQuiz questions={questions} />
+        </Card>
+
+        <Nav prev="/services/network-cloud" next="/services/endpoint-security" />
+      </div>
     </section>
   );
 }
 
-/* Hilfskomponenten */
-
-function FeatureCard({ title, points }) {
+function Card({ title, children }) {
   return (
-    <div
+    <article
       style={{
-        border: "1px solid rgba(255,255,255,0.10)",
-        borderRadius: 12,
-        padding: 14,
-        background: "#111",
+        borderRadius: 14,
+        border: "1px solid rgba(255,255,255,0.08)",
+        padding: 16,
+        background:
+          "linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02))",
       }}
     >
-      <div style={{ fontWeight: 800, marginBottom: 8 }}>{title}</div>
-      <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.6 }}>
-        {points.map((p) => (
-          <li key={p}>{p}</li>
-        ))}
-      </ul>
-    </div>
+      <h2 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 800 }}>{title}</h2>
+      {children}
+    </article>
   );
 }
 
-const detailsStyle = {
-  background: "#111",
-  border: "1px solid rgba(255,255,255,0.08)",
-  borderRadius: 12,
-  padding: 12,
-};
-
-const summaryStyle = {
-  cursor: "pointer",
-  fontWeight: 700,
-};
+function Nav({ prev, next }) {
+  return (
+    <div style={{ display: "flex", gap: 12, justifyContent: "space-between" }}>
+      <a href={prev} className="btn btn-ghost">Vorherige Lektion</a>
+      <a href={next} className="btn btn-primary">Nächste Lektion</a>
+    </div>
+  );
+}

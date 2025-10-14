@@ -1,9 +1,9 @@
 // app/about/page.js
 
 export const metadata = {
-  title: "Ueber uns | Bubble Security",
+  title: "Über uns | Bubble Security",
   description:
-    "Bubble Security – einfache, verstaendliche IT Sicherheitsloesungen fuer KMU. Lerne unser Team unsere Werte und unseren Ansatz kennen.",
+    "Bubble Security – einfache, verständliche IT Sicherheitslösungen für KMU. Lerne unser Team, unsere Werte und unseren Ansatz kennen.",
 };
 
 export default function AboutPage() {
@@ -28,12 +28,12 @@ export default function AboutPage() {
         {/* Text */}
         <div style={{ padding: "16px 6px" }}>
           <h1 style={{ margin: "0 0 10px", fontSize: 36, fontWeight: 900 }}>
-            Ueber <span style={{ color: "var(--red)" }}>Bubble Security</span>
+            Über <span style={{ color: "var(--red)" }}>Bubble Security</span>
           </h1>
           <p style={{ color: "var(--muted)", fontSize: 17, lineHeight: 1.6 }}>
-            Wir machen IT Sicherheit einfach verstaendlich und praxistauglich speziell
-            fuer KMU. Von der schnellen Ersthilfe bis zur nachhaltigen Sicherheitsstrategie
-            Wir erklaeren ohne Fachchinesisch setzen um schulen dein Team und bleiben an
+            Wir machen IT Sicherheit einfach verständlich und praxistauglich – speziell
+            für KMU. Von der schnellen Ersthilfe bis zur nachhaltigen Sicherheitsstrategie:
+            Wir erklären ohne Fachchinesisch, setzen um, schulen dein Team und bleiben an
             deiner Seite.
           </p>
 
@@ -48,7 +48,7 @@ export default function AboutPage() {
           >
             {[
               "24/7 Incident Response & schnelle Hilfe im Notfall",
-              "Security Checks Haertung von M365 Azure Netzwerk & Endpoints",
+              "Security Checks, Härtung von M365, Azure, Netzwerk & Endpoints",
               "Awareness Trainings mit Phishing Simulationen",
               "Datenschutz & Datenflusskontrolle (DLP)",
             ].map((item) => (
@@ -131,10 +131,10 @@ export default function AboutPage() {
           }}
         >
           {[
-            { k: "99.9%", v: "Verfuegbarkeit unserer Kernservices" },
+            { k: "99.9%", v: "Verfügbarkeit unserer Kernservices" },
             { k: "15+", v: "Jahre Security Erfahrung im Team" },
             { k: "500+", v: "geschulte Mitarbeitende pro Jahr" },
-            { k: "4h", v: "Durchschnitt Reaktionszeit im Incident" },
+            { k: "4h", v: "durchschnittliche Reaktionszeit im Incident" },
           ].map((item) => (
             <div
               key={item.k}
@@ -158,9 +158,9 @@ export default function AboutPage() {
             Unsere Werte
           </h2>
           <p style={{ color: "var(--muted)", margin: 0 }}>
-            <strong>Einfach und verstaendlich:</strong> Wir erklaeren bevor wir absichern.{" "}
-            <strong>Praxistauglich:</strong> Loesungen die im Alltag funktionieren.{" "}
-            <strong>Partnerschaftlich:</strong> Wir begleiten langfristig mit Checks
+            <strong>Einfach und verständlich:</strong> Wir erklären, bevor wir absichern.{" "}
+            <strong>Praxistauglich:</strong> Lösungen, die im Alltag funktionieren.{" "}
+            <strong>Partnerschaftlich:</strong> Wir begleiten langfristig mit Checks,
             Reports und klaren Empfehlungen.
           </p>
         </div>
@@ -179,10 +179,10 @@ export default function AboutPage() {
         }}
       >
         <h3 style={{ margin: "0 0 8px", fontSize: 24, fontWeight: 900 }}>
-          Bereit dein Unternehmen sicherer zu machen
+          Bereit, dein Unternehmen sicherer zu machen?
         </h3>
         <p style={{ color: "var(--muted)", marginTop: 0 }}>
-          Lass uns kurz sprechen wir zeigen dir in 15 Minuten wo du am meisten
+          Lass uns kurz sprechen – wir zeigen dir in 15 Minuten, wo du am meisten
           Sicherheitsgewinn erzielst.
         </p>
         <a href="/contact" className="btn btn-primary" style={{ height: 46 }}>
