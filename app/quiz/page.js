@@ -11,22 +11,22 @@ import { useEffect, useRef, useState } from "react";
  */
 const QUESTIONS = [
   {
-    q: "Welche Aktivitaet entfaltet Ransomware auf Ihrem PC?",
+    q: "Welche Aktivität entfaltet Ransomware auf deinem PC?",
     options: [
-      "Sie verschluesselt die Daten",
-      "Sie verschickt sich automatisch an alle Mail Adressen",
+      "Sie verschlüsselt die Daten",
+      "Sie verschickt sich automatisch an alle E Mail Adressen",
       "Sie belegt die Festplatte mit einem Passwort",
     ],
     correct: 0,
     explain:
-      "Ransomware verschluesselt Dateien und fordert Lösegeld. Schutz: Offline Backups, Updates, keine unbekannten Anhaenge öffnen.",
+      "Ransomware verschlüsselt Dateien und fordert Lösegeld. Schutz: Offline-Backups, Updates, keine unbekannten Anhänge öffnen.",
   },
   {
     q: "Social Engineering ist ...",
     options: [
       "zwischenmenschliche Beeinflussung, um an heikle Infos zu kommen",
-      "ein Schaedling, der nach seinem Erfinder benannt ist",
-      "ein Schaedling, der ueber soziale Netzwerke verbreitet wird",
+      "ein Schädling, der nach seinem Erfinder benannt ist",
+      "ein Schädling, der über soziale Netzwerke verbreitet wird",
     ],
     correct: 0,
     explain:
@@ -36,79 +36,79 @@ const QUESTIONS = [
     q: "Was ist ein sicheres Passwort?",
     options: [
       "12345678, damit ich es nicht vergesse",
-      "Eine zufaellige Kombination aus Zeichen, min. 12–16 Laenge",
+      "Eine zufällige Kombination aus Zeichen, min. 12–16 Länge",
       "Mein Vorname + Geburtsdatum",
     ],
     correct: 1,
     explain:
-      "Lange, zufaellige Passwörter sind am sichersten. Nutze einen Passwort Manager fuer unterschiedliche Logins.",
+      "Lange, zufällige Passwörter sind am sichersten. Nutze einen Passwort-Manager für unterschiedliche Logins.",
   },
   {
     q: "Warum 2 Faktor Authentisierung (2FA)?",
     options: [
-      "Sie ersetzt Passwörter vollstaendig",
-      "Sie fuegt eine zusaetzliche Sicherheitsebene hinzu",
-      "Sie macht Geraete schneller",
+      "Sie ersetzt Passwörter vollständig",
+      "Sie fügt eine zusätzliche Sicherheitsebene hinzu",
+      "Sie macht Geräte schneller",
     ],
     correct: 1,
     explain:
-      "2FA verhindert Kontouebernahmen, selbst wenn ein Passwort geleakt wurde (z. B. Code in App oder Security Key).",
+      "2FA verhindert Kontoübernahmen, selbst wenn ein Passwort geleakt wurde (z. B. Code in App oder Security Key).",
   },
   {
-    q: "Welche Backup Regel ist bewaehrt?",
+    q: "Welche Backup Regel ist bewährt?",
     options: ["3 2 1 Regel", "9 1 1 Regel", "2 4 6 Regel"],
     correct: 0,
     explain:
       "3 2 1: 3 Kopien, 2 unterschiedliche Medien, 1 Kopie extern/offline. So bleibt ein Angriff selten total.",
   },
   {
-    q: "Woran erkennst du haeufig Phishing?",
+    q: "Woran erkennst du häufig Phishing?",
     options: [
-      "Absender Adresse, Rechtschreibfehler, ungewöhnliche Links",
+      "Absenderadresse, Rechtschreibfehler, ungewöhnliche Links",
       "Immer an einem roten Logo",
       "Phishing kommt nur per SMS",
     ],
     correct: 0,
     explain:
-      "Typisch sind gefaelschte Absender, Druck (sofort handeln!), Link Taeuschungen und Dateianhaenge.",
+      "Typisch sind gefälschte Absender, Druck (sofort handeln!), Link-Täuschungen und Dateianhänge.",
   },
   {
     q: "Was ist ein VPN?",
     options: [
-      "Ein Werbe Netzwerk",
-      "Ein gesicherter, verschluesselter Tunnel in ein Netzwerk",
+      "Ein Werbenetzwerk",
+      "Ein gesicherter, verschlüsselter Tunnel in ein Netzwerk",
       "Eine neue Art von WLAN Router",
     ],
     correct: 1,
     explain:
-      "VPN verschluesselt den Datenverkehr und verbindet dich sicher mit einem Zielnetz (z. B. Firma).",
+      "VPN verschlüsselt den Datenverkehr und verbindet dich sicher mit einem Zielnetz (z. B. Firma).",
   },
   {
     q: "Patch Management bedeutet ...",
     options: [
       "nur optische Updates",
-      "regelmaessige Sicherheits Updates fuer Systeme/Software",
+      "regelmässige Sicherheits-Updates für Systeme/Software",
       "Backups löschen",
     ],
     correct: 1,
     explain:
-      "Sicherheitsluecken werden durch Updates geschlossen. Automatisiere Updates, wenn möglich.",
+      "Sicherheitslücken werden durch Updates geschlossen. Automatisiere Updates, wenn möglich.",
   },
   {
-    q: "Was ist ein Passwort Manager?",
+    q: "Was ist ein Passwort-Manager?",
     options: [
       "Ein Tool, das Passwörter speichert und starke generiert",
-      "Eine Excel Liste auf dem Desktop",
-      "Ein Browser Lesezeichen",
+      "Eine Excel-Liste auf dem Desktop",
+      "Ein Browser-Lesezeichen",
     ],
     correct: 0,
     explain:
-      "Passwort Manager erstellt und speichert komplexe, einzigartige Passwörter verschluesselt.",
+      "Passwort-Manager erstellt und speichert komplexe, einzigartige Passwörter verschlüsselt.",
   },
   {
-    q: "Wofuer steht Least Privilege?",
+    q: "Wofür steht Least Privilege?",
     options: [
-      "Alle bekommen Admin Rechte",
+      "Alle bekommen Adminrechte",
       "Jede Person bekommt nur die minimal nötigen Rechte",
       "Niemand darf etwas",
     ],
@@ -117,11 +117,11 @@ const QUESTIONS = [
       "Begrenze Berechtigungen strikt. So wird Missbrauch oder Schaden bei Kompromittierung reduziert.",
   },
   {
-    q: "Welche Datei ist besonders verdaechtig?",
+    q: "Welche Datei ist besonders verdächtig?",
     options: ["Rechnung.pdf", "Urlaub.jpg", "Bewerbung.pdf.exe"],
     correct: 2,
     explain:
-      "Doppelte Endungen tarnen ausfuehrbare Dateien (.exe). Niemals öffnen, sofort löschen/melden.",
+      "Doppelte Endungen tarnen ausführbare Dateien (.exe). Niemals öffnen, sofort löschen/melden.",
   },
   {
     q: "Was bedeutet MFA?",
@@ -131,11 +131,11 @@ const QUESTIONS = [
       "MFA = mehrere Faktoren (Wissen, Besitz, Biometrie). Höhere Sicherheit als nur Passwort.",
   },
   {
-    q: "Wie schuetzt du dich im öffentlichen WLAN?",
+    q: "Wie schützt du dich im öffentlichen WLAN?",
     options: [
       "Kein HTTPS verwenden",
-      "VPN nutzen und nur verschluesselte Seiten (HTTPS) aufrufen",
-      "Alle Passwörter ueberall gleich verwenden",
+      "VPN nutzen und nur verschlüsselte Seiten (HTTPS) aufrufen",
+      "Alle Passwörter überall gleich verwenden",
     ],
     correct: 1,
     explain:
@@ -145,19 +145,19 @@ const QUESTIONS = [
     q: "Was ist ein Security Awareness Training?",
     options: [
       "Technische Wartung am Server",
-      "Schulung, um Mitarbeitende fuer Risiken zu sensibilisieren",
-      "Eine Backup Wiederherstellung",
+      "Schulung, um Mitarbeitende für Risiken zu sensibilisieren",
+      "Eine Backup-Wiederherstellung",
     ],
     correct: 1,
     explain:
-      "Regelmaessige, kurze Trainings senken Phishing Erfolg deutlich und staerken die Sicherheitskultur.",
+      "Regelmässige, kurze Trainings senken Phishing-Erfolg deutlich und stärken die Sicherheitskultur.",
   },
   {
     q: "Was machst du bei einem Verdachtsfall (Phishing/Schadsoftware)?",
     options: [
       "Ignorieren, wird schon nichts sein",
-      "Sofort IT/Security melden und Geraet vom Netz trennen",
-      "An Freund innen weiterleiten und fragen",
+      "Sofort IT/Security melden und Gerät vom Netz trennen",
+      "An Freund:innen weiterleiten und fragen",
     ],
     correct: 1,
     explain:
@@ -165,7 +165,7 @@ const QUESTIONS = [
   },
 ];
 
-/* -------- Ergebnis Tiers / Badges + Feedback -------- */
+/* -------- Ergebnis-Tiers / Badges + Feedback -------- */
 function getResult(score, total) {
   const pct = Math.round((score / total) * 100);
 
@@ -174,13 +174,13 @@ function getResult(score, total) {
     return {
       pct,
       badge: { label: "Security Hero", icon: "🏆", bg: "rgba(34,197,94,0.14)", fg: "#bbf7d0", border: "1px solid rgba(34,197,94,0.45)" },
-      title: "Wow Hero Niveau!",
+      title: "Wow, Hero-Niveau!",
       text:
-        "Vorbildlich! Du handelst sehr sicherheitsbewusst. Bleib bei Updates und 2FA konsequent und plane regelmaessige Checks.",
+        "Vorbildlich! Du handelst sehr sicherheitsbewusst. Bleib bei Updates und 2FA konsequent und plane regelmässige Checks.",
       tips: [
-        "Regelmaessige Mini Audits (z. B. Berechtigungen, Schatten IT)",
-        "Security Key (FIDO2) fuer kritische Konten nutzen",
-        "Backups inkl. Restore Test einplanen",
+        "Regelmässige Mini-Audits (z. B. Berechtigungen, Schatten-IT)",
+        "Security Key (FIDO2) für kritische Konten nutzen",
+        "Backups inkl. Restore-Test einplanen",
       ],
       confetti: true,
     };
@@ -189,12 +189,12 @@ function getResult(score, total) {
     return {
       pct,
       badge: { label: "Pro", icon: "✅", bg: "rgba(34,197,94,0.12)", fg: "#bbf7d0", border: "1px solid rgba(34,197,94,0.45)" },
-      title: "Stark Profi Niveau!",
+      title: "Stark, Profi-Niveau!",
       text:
         "Du beherrschst die Grundlagen sehr gut. Halte Routinen (2FA, Updates, Backups) bei und vertiefe Spezialthemen.",
       tips: [
-        "Security Key zusaetzlich zur App fuer wichtige Konten",
-        "Regelmaessige Restore Tests deiner Backups",
+        "Security Key zusätzlich zur App für wichtige Konten",
+        "Regelmässige Restore-Tests deiner Backups",
         "Least Privilege konsequent halten",
       ],
       confetti: true,
@@ -208,9 +208,9 @@ function getResult(score, total) {
       text:
         "Du bist sicher unterwegs. Mit ein paar Tweaks erreichst du ein sehr gutes Sicherheitsniveau.",
       tips: [
-        "Passwort Manager ueberall nutzen und alte Passwörter ersetzen",
-        "2FA lueckenlos aktivieren",
-        "Kurztrainings/Phishing Checks regelmaessig einplanen",
+        "Passwort-Manager überall nutzen und alte Passwörter ersetzen",
+        "2FA lückenlos aktivieren",
+        "Kurztrainings/Phishing-Checks regelmässig einplanen",
       ],
       confetti: false,
     };
@@ -221,11 +221,11 @@ function getResult(score, total) {
       badge: { label: "Learner", icon: "🧭", bg: "rgba(59,130,246,0.12)", fg: "#dbeafe", border: "1px solid rgba(59,130,246,0.45)" },
       title: "Guter Anfang!",
       text:
-        "Du hast die wichtigsten Themen erkannt jetzt gezielt nachschaerfen und Routinen aufbauen.",
+        "Du hast die wichtigsten Themen erkannt – jetzt gezielt nachschärfen und Routinen aufbauen.",
       tips: [
-        "2FA fuer E Mail, Cloud und Banking sofort aktivieren",
+        "2FA für E Mail, Cloud und Banking sofort aktivieren",
         "3 2 1 Backups einrichten",
-        "Phishing Merkmale ueben (Absender, Links, Druck)",
+        "Phishing-Merkmale üben (Absender, Links, Druck)",
       ],
       confetti: false,
     };
@@ -233,19 +233,19 @@ function getResult(score, total) {
   return {
     pct,
     badge: { label: "Aufholer", icon: "⚠️", bg: "rgba(239,68,68,0.12)", fg: "#fecaca", border: "1px solid rgba(239,68,68,0.6)" },
-    title: "Hoopla nicht schlimm!",
+    title: "Hoppla – nicht schlimm!",
     text:
       "Mit drei Basics hebst du deine Sicherheit sofort deutlich an. Fang klein an, aber konsequent.",
     tips: [
-      "Passwort Manager einfuehren und starke Passwörter nutzen",
-      "2FA wirklich ueberall einschalten",
-      "Auto Updates aktivieren (System und Apps)",
+      "Passwort-Manager einführen und starke Passwörter nutzen",
+      "2FA wirklich überall einschalten",
+      "Auto-Updates aktivieren (System und Apps)",
     ],
     confetti: false,
   };
 }
 
-/* Kleiner Konfetti Effekt (Canvas), keine Abhaengigkeiten */
+/* Kleiner Konfetti-Effekt (Canvas), keine Abhängigkeiten */
 function ConfettiBurst({ run = false, duration = 1800 }) {
   const ref = useRef(null);
   useEffect(() => {
@@ -259,7 +259,7 @@ function ConfettiBurst({ run = false, duration = 1800 }) {
 
     const resize = () => {
       const w = canvas.parentElement.clientWidth;
-      const h = 220; // genug Höhe fuer Burst im Ergebnis
+      const h = 220; // genug Höhe für Burst im Ergebnis
       canvas.width = Math.floor(w * dpr);
       canvas.height = Math.floor(h * dpr);
       canvas.style.width = `${w}px`;
@@ -392,7 +392,7 @@ export default function QuizPage() {
           <span>{res.badge.label}</span>
         </div>
 
-        {/* Tier Text */}
+        {/* Tier-Text */}
         <div style={{ background: res.badge.bg, border: res.badge.border, borderRadius: 10, padding: 14, marginBottom: 14 }}>
           <strong style={{ display: "block", marginBottom: 6 }}>{res.title}</strong>
           <span style={{ color: "var(--text)" }}>{res.text}</span>
@@ -400,7 +400,7 @@ export default function QuizPage() {
 
         {/* Next steps */}
         <div className="section" style={{ background: "transparent" }}>
-          <strong>Empfohlene naechste Schritte:</strong>
+          <strong>Empfohlene nächste Schritte:</strong>
           <ul style={{ marginTop: 8, marginBottom: 0, paddingLeft: 18, lineHeight: 1.7 }}>
             {res.tips.map((t, i) => (
               <li key={i}>{t}</li>
@@ -489,7 +489,7 @@ export default function QuizPage() {
           })}
         </div>
 
-        {/* Erklaerung */}
+        {/* Erklärung */}
         {showExplain && (
           <div
             style={{
@@ -509,7 +509,7 @@ export default function QuizPage() {
                 padding: 14,
               }}
             >
-              <strong>Erklaerung:</strong> {q.explain}
+              <strong>Erklärung:</strong> {q.explain}
             </div>
           </div>
         )}
