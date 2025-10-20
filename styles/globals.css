@@ -8,7 +8,7 @@
   --bg: #0a0a0a;        /* Schwarz */
   --card: #111111;      /* Dunkelgrau */
   --text: #e5e7eb;      /* Hellgrau */
-  --muted: #9ca3af;     /* Sekundärtext */
+  --muted: #9ca3af;     /* Sekundaertext */
   --red: #ef4444;       /* Rot */
   --red-dark: #b91c1c;  /* Dunkleres Rot */
   --border: rgba(255,255,255,0.08);
@@ -87,7 +87,7 @@ a { color: inherit; text-decoration: none; }
 }
 .footer p { color: var(--muted); }
 
-/* Quiz */
+/* Quiz (Basis – fuer alte Komponenten weiterhin vorhanden) */
 .quiz-card {
   background-color: #121212;
   border: 1px solid var(--border);
@@ -107,3 +107,90 @@ a { color: inherit; text-decoration: none; }
 .quiz-option.selected { background-color: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.5); }
 .quiz-option.correct  { background-color: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.5); }
 .quiz-option.wrong    { background-color: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.6); }
+
+/* =========================================================
+   Duolingo-Style Shell (zentriert, grosse Pill-Optionen)
+   ========================================================= */
+.duo-shell { max-width: 980px; margin: 0 auto; padding: 24px 16px 56px; }
+.duo-topbar { display: grid; grid-template-columns: 32px 1fr auto; align-items: center; gap: 12px; margin-bottom: 18px; }
+.duo-close { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 999px; border: 1px solid var(--border); background: #0d0d0d; }
+.duo-close:hover { background: rgba(255,255,255,0.05); }
+
+.duo-progress { height: 8px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
+.duo-progress > span { display: block; height: 100%; background: var(--red); width: 0%; }
+
+.duo-hearts { font-weight: 800; letter-spacing: .3px; display: flex; align-items: center; gap: 6px; }
+.duo-hearts .count { padding: 2px 10px; border-radius: 999px; border: 1px solid var(--border); background: #0d0d0d; }
+
+.duo-card { background: #111; border: 1px solid var(--border); border-radius: 16px; padding: 22px; box-shadow: 0 14px 40px rgba(0,0,0,0.25); }
+.duo-title { font-size: 28px; font-weight: 900; margin: 0 0 6px; }
+.duo-sub { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+
+.duo-options { display: grid; gap: 10px; }
+.duo-option { 
+  width: 100%; text-align: left; padding: 14px 16px; border-radius: 12px;
+  border: 1px solid var(--border); background: #0e0e0e; font-size: 16px; 
+  transition: transform .08s ease, border-color .2s, background-color .2s;
+}
+.duo-option:hover { background: rgba(255,255,255,0.05); transform: translateY(-1px); }
+.duo-option.selected { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.6); }
+.duo-option.correct  { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.6); }
+.duo-option.wrong    { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.7); }
+
+.duo-footer { display:flex; justify-content: space-between; margin-top: 16px; }
+.duo-footer .ghost { padding: 10px 16px; border-radius: 10px; border: 1px solid var(--border); background:#0e0e0e; }
+.duo-footer .primary { padding: 10px 18px; border-radius: 10px; background: var(--red); color: #111; font-weight: 800; border: 1px solid rgba(239,68,68,.5); }
+.duo-footer .primary:hover { background: var(--red-dark); color: #fff; }
+
+/* ===== Kontrast-FIX: immer gut lesbarer Text auf dunklem UI ===== */
+.duo-option,
+.quiz-option,
+button.duo-option,
+input.duo-option,
+.duo-footer .ghost {
+  color: var(--text) !important;
+}
+
+/* Platzhalter in Eingaben */
+.duo-option::placeholder,
+input.duo-option::placeholder {
+  color: var(--muted);
+  opacity: .95;
+}
+
+/* Disabled/gesperrt deutlicher kennzeichnen */
+.duo-option:disabled,
+.duo-option[aria-disabled="true"] {
+  color: #6b7280 !important; /* gray-500 */
+  opacity: .8;
+}
+
+/* Fokus sichtbar (A11y) */
+.duo-option:focus-visible,
+.quiz-option:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid rgba(239,68,68,.65);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px rgba(239,68,68,.15);
+}
+
+/* Primär-Buttons: Textfarbe sicher setzen */
+.duo-footer .primary,
+.btn-primary {
+  color: #111 !important;     /* auf Rot-Hintergrund */
+}
+.duo-footer .primary:hover,
+.btn-primary:hover {
+  color: #fff !important;
+}
+
+/* Ghost-Buttons beim Hover klar */
+.duo-footer .ghost:hover,
+.btn-ghost:hover {
+  color: #fff !important;
+}
+
+/* Animationen respektieren System-Einstellung */
+@media (prefers-reduced-motion: reduce) {
+  .duo-option:hover { transform: none; }
+}

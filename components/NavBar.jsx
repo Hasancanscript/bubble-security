@@ -8,7 +8,7 @@ export default function NavBar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-  // Menü nach Navigation automatisch schließen
+  // Menü nach Navigation automatisch schliessen
   useEffect(() => {
     setOpen(false);
   }, [pathname]);

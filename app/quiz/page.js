@@ -1,542 +1,590 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import jsPDF from "jspdf";
 
-/**
- * 15 Fragen jeweils:
- * - q: Frage
- * - options: Antwortmöglichkeiten
- * - correct: Index der richtigen Antwort
- * - explain: kurze Erklärung
- */
-const QUESTIONS = [
-  {
-    q: "Welche Aktivität entfaltet Ransomware auf deinem PC?",
-    options: [
-      "Sie verschlüsselt die Daten",
-      "Sie verschickt sich automatisch an alle E Mail Adressen",
-      "Sie belegt die Festplatte mit einem Passwort",
-    ],
-    correct: 0,
-    explain:
-      "Ransomware verschlüsselt Dateien und fordert Lösegeld. Schutz: Offline-Backups, Updates, keine unbekannten Anhänge öffnen.",
-  },
-  {
-    q: "Social Engineering ist ...",
-    options: [
-      "zwischenmenschliche Beeinflussung, um an heikle Infos zu kommen",
-      "ein Schädling, der nach seinem Erfinder benannt ist",
-      "ein Schädling, der über soziale Netzwerke verbreitet wird",
-    ],
-    correct: 0,
-    explain:
-      "Angreifer nutzen psychologische Tricks (z. B. falsche Dringlichkeit), um Passwörter oder interne Infos zu erlangen.",
-  },
-  {
-    q: "Was ist ein sicheres Passwort?",
-    options: [
-      "12345678, damit ich es nicht vergesse",
-      "Eine zufällige Kombination aus Zeichen, min. 12–16 Länge",
-      "Mein Vorname + Geburtsdatum",
-    ],
-    correct: 1,
-    explain:
-      "Lange, zufällige Passwörter sind am sichersten. Nutze einen Passwort-Manager für unterschiedliche Logins.",
-  },
-  {
-    q: "Warum 2 Faktor Authentisierung (2FA)?",
-    options: [
-      "Sie ersetzt Passwörter vollständig",
-      "Sie fügt eine zusätzliche Sicherheitsebene hinzu",
-      "Sie macht Geräte schneller",
-    ],
-    correct: 1,
-    explain:
-      "2FA verhindert Kontoübernahmen, selbst wenn ein Passwort geleakt wurde (z. B. Code in App oder Security Key).",
-  },
-  {
-    q: "Welche Backup Regel ist bewährt?",
-    options: ["3 2 1 Regel", "9 1 1 Regel", "2 4 6 Regel"],
-    correct: 0,
-    explain:
-      "3 2 1: 3 Kopien, 2 unterschiedliche Medien, 1 Kopie extern/offline. So bleibt ein Angriff selten total.",
-  },
-  {
-    q: "Woran erkennst du häufig Phishing?",
-    options: [
-      "Absenderadresse, Rechtschreibfehler, ungewöhnliche Links",
-      "Immer an einem roten Logo",
-      "Phishing kommt nur per SMS",
-    ],
-    correct: 0,
-    explain:
-      "Typisch sind gefälschte Absender, Druck (sofort handeln!), Link-Täuschungen und Dateianhänge.",
-  },
-  {
-    q: "Was ist ein VPN?",
-    options: [
-      "Ein Werbenetzwerk",
-      "Ein gesicherter, verschlüsselter Tunnel in ein Netzwerk",
-      "Eine neue Art von WLAN Router",
-    ],
-    correct: 1,
-    explain:
-      "VPN verschlüsselt den Datenverkehr und verbindet dich sicher mit einem Zielnetz (z. B. Firma).",
-  },
-  {
-    q: "Patch Management bedeutet ...",
-    options: [
-      "nur optische Updates",
-      "regelmässige Sicherheits-Updates für Systeme/Software",
-      "Backups löschen",
-    ],
-    correct: 1,
-    explain:
-      "Sicherheitslücken werden durch Updates geschlossen. Automatisiere Updates, wenn möglich.",
-  },
-  {
-    q: "Was ist ein Passwort-Manager?",
-    options: [
-      "Ein Tool, das Passwörter speichert und starke generiert",
-      "Eine Excel-Liste auf dem Desktop",
-      "Ein Browser-Lesezeichen",
-    ],
-    correct: 0,
-    explain:
-      "Passwort-Manager erstellt und speichert komplexe, einzigartige Passwörter verschlüsselt.",
-  },
-  {
-    q: "Wofür steht Least Privilege?",
-    options: [
-      "Alle bekommen Adminrechte",
-      "Jede Person bekommt nur die minimal nötigen Rechte",
-      "Niemand darf etwas",
-    ],
-    correct: 1,
-    explain:
-      "Begrenze Berechtigungen strikt. So wird Missbrauch oder Schaden bei Kompromittierung reduziert.",
-  },
-  {
-    q: "Welche Datei ist besonders verdächtig?",
-    options: ["Rechnung.pdf", "Urlaub.jpg", "Bewerbung.pdf.exe"],
-    correct: 2,
-    explain:
-      "Doppelte Endungen tarnen ausführbare Dateien (.exe). Niemals öffnen, sofort löschen/melden.",
-  },
-  {
-    q: "Was bedeutet MFA?",
-    options: ["Multi Faktor Authentisierung", "Multi File Archiv", "Mega Fast Access"],
-    correct: 0,
-    explain:
-      "MFA = mehrere Faktoren (Wissen, Besitz, Biometrie). Höhere Sicherheit als nur Passwort.",
-  },
-  {
-    q: "Wie schützt du dich im öffentlichen WLAN?",
-    options: [
-      "Kein HTTPS verwenden",
-      "VPN nutzen und nur verschlüsselte Seiten (HTTPS) aufrufen",
-      "Alle Passwörter überall gleich verwenden",
-    ],
-    correct: 1,
-    explain:
-      "Ohne VPN/HTTPS kann Verkehr mitgelesen/manipuliert werden. Meide Logins in offenen WLANs.",
-  },
-  {
-    q: "Was ist ein Security Awareness Training?",
-    options: [
-      "Technische Wartung am Server",
-      "Schulung, um Mitarbeitende für Risiken zu sensibilisieren",
-      "Eine Backup-Wiederherstellung",
-    ],
-    correct: 1,
-    explain:
-      "Regelmässige, kurze Trainings senken Phishing-Erfolg deutlich und stärken die Sicherheitskultur.",
-  },
-  {
-    q: "Was machst du bei einem Verdachtsfall (Phishing/Schadsoftware)?",
-    options: [
-      "Ignorieren, wird schon nichts sein",
-      "Sofort IT/Security melden und Gerät vom Netz trennen",
-      "An Freund:innen weiterleiten und fragen",
-    ],
-    correct: 1,
-    explain:
-      "Je schneller reagiert wird, desto kleiner der Schaden. Melden, Netzwerk trennen, keine weiteren Klicks.",
-  },
-];
+const RULES = Object.freeze({
+  START_HEARTS: 5,
+  XP_CORRECT: 10,
+});
 
-/* -------- Ergebnis-Tiers / Badges + Feedback -------- */
-function getResult(score, total) {
-  const pct = Math.round((score / total) * 100);
-
-  // 5 Stufen inkl. Badge, Stil & Tipps
-  if (pct >= 95) {
-    return {
-      pct,
-      badge: { label: "Security Hero", icon: "🏆", bg: "rgba(34,197,94,0.14)", fg: "#bbf7d0", border: "1px solid rgba(34,197,94,0.45)" },
-      title: "Wow, Hero-Niveau!",
-      text:
-        "Vorbildlich! Du handelst sehr sicherheitsbewusst. Bleib bei Updates und 2FA konsequent und plane regelmässige Checks.",
-      tips: [
-        "Regelmässige Mini-Audits (z. B. Berechtigungen, Schatten-IT)",
-        "Security Key (FIDO2) für kritische Konten nutzen",
-        "Backups inkl. Restore-Test einplanen",
-      ],
-      confetti: true,
-    };
-  }
-  if (pct >= 80) {
-    return {
-      pct,
-      badge: { label: "Pro", icon: "✅", bg: "rgba(34,197,94,0.12)", fg: "#bbf7d0", border: "1px solid rgba(34,197,94,0.45)" },
-      title: "Stark, Profi-Niveau!",
-      text:
-        "Du beherrschst die Grundlagen sehr gut. Halte Routinen (2FA, Updates, Backups) bei und vertiefe Spezialthemen.",
-      tips: [
-        "Security Key zusätzlich zur App für wichtige Konten",
-        "Regelmässige Restore-Tests deiner Backups",
-        "Least Privilege konsequent halten",
-      ],
-      confetti: true,
-    };
-  }
-  if (pct >= 60) {
-    return {
-      pct,
-      badge: { label: "Defender", icon: "🛡️", bg: "rgba(250,204,21,0.12)", fg: "#fef3c7", border: "1px solid rgba(250,204,21,0.45)" },
-      title: "Solide Basis!",
-      text:
-        "Du bist sicher unterwegs. Mit ein paar Tweaks erreichst du ein sehr gutes Sicherheitsniveau.",
-      tips: [
-        "Passwort-Manager überall nutzen und alte Passwörter ersetzen",
-        "2FA lückenlos aktivieren",
-        "Kurztrainings/Phishing-Checks regelmässig einplanen",
-      ],
-      confetti: false,
-    };
-  }
-  if (pct >= 40) {
-    return {
-      pct,
-      badge: { label: "Learner", icon: "🧭", bg: "rgba(59,130,246,0.12)", fg: "#dbeafe", border: "1px solid rgba(59,130,246,0.45)" },
-      title: "Guter Anfang!",
-      text:
-        "Du hast die wichtigsten Themen erkannt – jetzt gezielt nachschärfen und Routinen aufbauen.",
-      tips: [
-        "2FA für E Mail, Cloud und Banking sofort aktivieren",
-        "3 2 1 Backups einrichten",
-        "Phishing-Merkmale üben (Absender, Links, Druck)",
-      ],
-      confetti: false,
-    };
-  }
-  return {
-    pct,
-    badge: { label: "Aufholer", icon: "⚠️", bg: "rgba(239,68,68,0.12)", fg: "#fecaca", border: "1px solid rgba(239,68,68,0.6)" },
-    title: "Hoppla – nicht schlimm!",
-    text:
-      "Mit drei Basics hebst du deine Sicherheit sofort deutlich an. Fang klein an, aber konsequent.",
-    tips: [
-      "Passwort-Manager einführen und starke Passwörter nutzen",
-      "2FA wirklich überall einschalten",
-      "Auto-Updates aktivieren (System und Apps)",
-    ],
-    confetti: false,
-  };
-}
-
-/* Kleiner Konfetti-Effekt (Canvas), keine Abhängigkeiten */
-function ConfettiBurst({ run = false, duration = 1800 }) {
-  const ref = useRef(null);
-  useEffect(() => {
-    if (!run) return;
-    const canvas = ref.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    let raf = 0;
-    const dpr = Math.max(1, window.devicePixelRatio || 1);
-
-    const resize = () => {
-      const w = canvas.parentElement.clientWidth;
-      const h = 220; // genug Höhe für Burst im Ergebnis
-      canvas.width = Math.floor(w * dpr);
-      canvas.height = Math.floor(h * dpr);
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(dpr, dpr);
-    };
-    resize();
-
-    const colors = ["#22c55e", "#ef4444", "#f59e0b", "#3b82f6", "#a855f7"];
-    const pieces = Array.from({ length: 80 }, () => ({
-      x: canvas.clientWidth / 2,
-      y: 20,
-      r: Math.random() * 6 + 3,
-      c: colors[Math.floor(Math.random() * colors.length)],
-      vx: (Math.random() - 0.5) * 6,
-      vy: Math.random() * 2 + 3,
-      a: Math.random() * Math.PI * 2,
-      vr: (Math.random() - 0.5) * 0.2,
-    }));
-
-    const start = performance.now();
-    const draw = (t) => {
-      const elapsed = t - start;
-      ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
-      pieces.forEach((p) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.a += p.vr;
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.a);
-        ctx.fillStyle = p.c;
-        ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
-        ctx.restore();
-      });
-      if (elapsed < duration) raf = requestAnimationFrame(draw);
-    };
-    raf = requestAnimationFrame(draw);
-
-    window.addEventListener("resize", resize);
-    const end = setTimeout(() => cancelAnimationFrame(raf), duration + 50);
-    return () => {
-      cancelAnimationFrame(raf);
-      clearTimeout(end);
-      window.removeEventListener("resize", resize);
-    };
-  }, [run, duration]);
-
-  return (
-    <canvas
-      ref={ref}
-      aria-hidden
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: 220,
-        pointerEvents: "none",
-      }}
-    />
-  );
-}
+const PDF_LOGO_PATH_PRIMARY = "/report-logo.png";
+const PDF_LOGO_PATH_FALLBACK = "/logo.png";
 
 export default function QuizPage() {
-  const [step, setStep] = useState(0); // aktuelle Frage
-  const [chosen, setChosen] = useState(Array(QUESTIONS.length).fill(null));
-  const [showExplain, setShowExplain] = useState(false);
-  const [finished, setFinished] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [lesson, setLesson] = useState(null);
+  const [index, setIndex] = useState(0);
+  const [hearts, setHearts] = useState(RULES.START_HEARTS);
+  const [xpSession, setXpSession] = useState(0);
+  const [streak, setStreak] = useState(0);
+  const [hintsUsed, setHintsUsed] = useState(0);
+  const [answers, setAnswers] = useState([]); // [{id, correct, user}]
+  const [ended, setEnded] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
 
-  const q = QUESTIONS[step];
-  const selected = chosen[step];
-  const isCorrect = selected === q?.correct;
+  const slug = "security-basics-1";
+  const q = lesson?.questions?.[index];
+  const total = lesson?.questions?.length ?? 0;
+  const progress = total ? index + 1 : 0;
 
-  const choose = (idx) => {
-    const next = [...chosen];
-    next[step] = idx;
-    setChosen(next);
-    setShowExplain(true); // sofortige Auswertung
-  };
+  useEffect(() => {
+    setReducedMotion(
+      typeof window !== "undefined" &&
+        window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+    );
+  }, []);
 
-  const goNext = () => {
-    if (step < QUESTIONS.length - 1) {
-      setStep(step + 1);
-      setShowExplain(false);
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/lesson/${slug}`, { cache: "no-store" });
+        const data = await res.json();
+        data.questions = data.questions.map((qq, i) => ({
+          indexLabel: `${i + 1}/${data.questions.length}`,
+          ...qq,
+        }));
+        setLesson(data);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 1000);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  function onAnswer(result) {
+    const nextAnswers = [...answers, { id: q.id, correct: result.correct, user: result.user }];
+    setAnswers(nextAnswers);
+
+    let nextHearts = hearts;
+    if (result.correct) {
+      setXpSession((x) => x + RULES.XP_CORRECT);
+      setStreak((s) => s + 1);
+      setToast({ type: "success", msg: "Richtig! +10 XP" });
     } else {
-      setFinished(true);
+      setHearts((prev) => {
+        nextHearts = prev - 1;
+        return nextHearts;
+      });
+      if (nextHearts === hearts) nextHearts = hearts - 1;
+      setStreak(0);
+      setToast({ type: "error", msg: "Falsch! −1 Herz" });
     }
-  };
 
-  const goPrev = () => {
-    if (step > 0) {
-      setStep(step - 1);
-      setShowExplain(chosen[step - 1] !== null);
+    const isLast = index + 1 >= total;
+    const heartsAfter = result.correct ? hearts : nextHearts;
+
+    const goNext = () => {
+      if (heartsAfter <= 0 || isLast) setEnded(true);
+      else setIndex((i) => i + 1);
+    };
+
+    if (reducedMotion) goNext(); else setTimeout(goNext, 250);
+  }
+
+  async function finishSession() {
+    try {
+      await fetch("/api/attempt", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          lessonSlug: lesson?.slug,
+          xpEarned: xpSession,
+          correctCount: answers.filter((a) => a.correct).length,
+          total,
+          heartsLeft: hearts,
+          streakDelta: streak,
+          finished: true,
+          answers,
+          hintsUsed,
+        }),
+      });
+    } catch (e) {
+      console.error(e);
     }
-  };
+  }
 
-  const score = chosen.reduce((s, a, i) => s + (a === QUESTIONS[i].correct ? 1 : 0), 0);
+  useEffect(() => {
+    if (ended) finishSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ended]);
 
-  if (finished) {
-    const res = getResult(score, QUESTIONS.length);
+  function restart() {
+    setIndex(0);
+    setHearts(RULES.START_HEARTS);
+    setXpSession(0);
+    setStreak(0);
+    setHintsUsed(0);
+    setAnswers([]);
+    setEnded(false);
+    setToast(null);
+    setShowIntro(true);
+  }
 
-    return (
-      <main className="section" style={{ maxWidth: 900, margin: "24px auto", position: "relative", overflow: "hidden" }}>
-        {/* Konfetti nur für Pro und Hero */}
-        <ConfettiBurst run={res.confetti} />
+  /* =======================
+     PDF GENERATOR
+     ======================= */
+  async function downloadPdf() {
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const M = 56;
+    let y = M;
 
-        <h1 style={{ marginTop: 0, color: "var(--red)" }}>Dein Ergebnis</h1>
-        <p style={{ fontSize: 18, marginBottom: 12 }}>
-          Richtig: <strong>{score}</strong> von <strong>{QUESTIONS.length}</strong>{" "}
-          ({res.pct}%)
-        </p>
+    y += await addCenteredLogo(doc, y, pageW);
 
-        {/* Badge */}
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 10,
-            padding: "8px 14px",
-            borderRadius: 999,
-            background: res.badge.bg,
-            color: res.badge.fg,
-            border: res.badge.border,
-            fontWeight: 800,
-            marginBottom: 12,
-          }}
-        >
-          <span aria-hidden style={{ fontSize: 18 }}>{res.badge.icon}</span>
-          <span>{res.badge.label}</span>
-        </div>
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.text("Bubble Security – Quiz Report", M, y + 6);
+    y += 22;
 
-        {/* Tier-Text */}
-        <div style={{ background: res.badge.bg, border: res.badge.border, borderRadius: 10, padding: 14, marginBottom: 14 }}>
-          <strong style={{ display: "block", marginBottom: 6 }}>{res.title}</strong>
-          <span style={{ color: "var(--text)" }}>{res.text}</span>
-        </div>
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor("#666666");
+    doc.text(new Date().toLocaleString(), M, y);
+    doc.setTextColor("#000000");
+    y += 18;
 
-        {/* Next steps */}
-        <div className="section" style={{ background: "transparent" }}>
-          <strong>Empfohlene nächste Schritte:</strong>
-          <ul style={{ marginTop: 8, marginBottom: 0, paddingLeft: 18, lineHeight: 1.7 }}>
-            {res.tips.map((t, i) => (
-              <li key={i}>{t}</li>
-            ))}
-          </ul>
-        </div>
+    drawDivider(doc, M, y, pageW - M * 2); y += 12;
 
-        <div style={{ marginTop: 16, display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <button
-            onClick={() => {
-              setStep(0);
-              setFinished(false);
-              setShowExplain(false);
-              setChosen(Array(QUESTIONS.length).fill(null));
-            }}
-            className="btn btn-primary"
-          >
-            Quiz neu starten
-          </button>
+    const correctCount = answers.filter((a) => a.correct).length;
+    const pct = total ? Math.round((correctCount / total) * 100) : 0;
 
-          <a href="/contact" className="btn btn-ghost">
-            Kostenlosen Mini Check anfragen
-          </a>
-        </div>
-      </main>
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text("Zusammenfassung", M, y); y += 14;
+
+    y = drawSummaryTable(doc, M, y, [
+      ["Lektion", lesson?.title ?? "-"],
+      ["Fragen", String(total)],
+      ["Richtig", `${correctCount} (${pct}%)`],
+      ["XP", String(xpSession)],
+      ["Herzen übrig", String(hearts)],
+      ["Streak", String(streak)],
+    ], pageW - M * 2, pageH);
+
+    y += 10;
+    drawDivider(doc, M, y, pageW - M * 2); y += 18;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text("Fragen & Antworten", M, y); y += 16;
+
+    lesson?.questions?.forEach((qq, i) => {
+      if (y > pageH - 120) { doc.addPage(); y = M; }
+
+      // Frage
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      const qLines = doc.splitTextToSize(`${i + 1}. ${qq.prompt}`, pageW - M * 2);
+      doc.text(qLines, M, y); y += qLines.length * 14;
+
+      // Optionen (MC als Bullet-Liste – keine 1/2/3 Nummerierung)
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(11);
+      if (qq.type === "mc") {
+        const bulletLines = qq.options.map((opt) => `• ${opt}`);
+        doc.text(bulletLines, M, y);
+        y += bulletLines.length * 14;
+      }
+      if (qq.type === "tf") {
+        doc.text("Optionen: Wahr  |  Falsch", M, y); y += 14;
+      }
+
+      const a = answers[i];
+      const correct = a?.correct === true;
+      const userText = formatUserAnswer(qq, a?.user);
+      const rightText = correctAnswerText(qq);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      doc.setTextColor(correct ? "#0a7a55" : "#c53333");
+      doc.text(`Status: ${correct ? "Richtig ✓" : "Falsch ✗"}`, M, y);
+      doc.setTextColor("#000000");
+      y += 14;
+
+      doc.setFont("helvetica", "normal");
+      const ua = doc.splitTextToSize(`Deine Antwort: ${userText}`, pageW - M * 2);
+      doc.text(ua, M, y); y += ua.length * 14;
+
+      const ra = doc.splitTextToSize(`Richtige Antwort: ${rightText}`, pageW - M * 2);
+      doc.text(ra, M, y); y += ra.length * 14;
+
+      if (qq.explain) {
+        doc.setFont("helvetica", "italic");
+        const ex = doc.splitTextToSize(`Erklärung: ${qq.explain}`, pageW - M * 2);
+        doc.text(ex, M, y); y += ex.length * 14;
+      }
+
+      y += 6;
+      drawDivider(doc, M, y, pageW - M * 2); y += 16;
+    });
+
+    drawFooterPageNumber(doc);
+
+    doc.save(
+      `BubbleSecurity_Quiz_${lesson?.slug ?? "lesson"}_${new Date()
+        .toISOString()
+        .slice(0, 10)}.pdf`
     );
   }
 
+  function drawDivider(doc, x, y, w) {
+    doc.setDrawColor(220);
+    doc.line(x, y, x + w, y);
+  }
+  function drawSummaryTable(doc, x, y, rows, width, pageH) {
+    const col1 = 160;
+    doc.setFontSize(11);
+    rows.forEach(([label, value]) => {
+      if (y > pageH - 80) { doc.addPage(); y = 56; }
+      doc.setFont("helvetica", "bold");
+      doc.text(String(label).toUpperCase(), x, y);
+      doc.setFont("helvetica", "normal");
+      const lines = doc.splitTextToSize(String(value), width - col1);
+      doc.text(lines, x + col1, y);
+      y += lines.length * 14;
+    });
+    return y;
+  }
+  function drawFooterPageNumber(doc) {
+    const totalPages = doc.getNumberOfPages();
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      const pageW = doc.internal.pageSize.getWidth();
+      const pageH = doc.internal.pageSize.getHeight();
+      doc.setTextColor("#777777");
+      doc.text(`${i} / ${totalPages}`, pageW - 56, pageH - 28, { align: "right" });
+    }
+    doc.setTextColor("#000000");
+  }
+
+  async function addCenteredLogo(doc, y, pageW) {
+    try {
+      let data = await loadImageData(PDF_LOGO_PATH_PRIMARY);
+      if (!data) data = await loadImageData(PDF_LOGO_PATH_FALLBACK);
+      if (!data) return 0;
+
+      const maxW = 320;
+      const maxH = 120;
+      const { dataUrl, w, h } = data;
+
+      let drawW = maxW;
+      let drawH = (h / w) * drawW;
+      if (drawH > maxH) { drawH = maxH; drawW = (w / h) * drawH; }
+
+      const x = (pageW - drawW) / 2;
+      doc.addImage(dataUrl, "PNG", x, y, drawW, drawH);
+      return drawH + 18;
+    } catch {
+      return 0;
+    }
+  }
+
+  async function loadImageData(path) {
+    try {
+      const url = new URL(path, window.location.origin).toString();
+      const img = await loadImage(url);
+      const can = document.createElement("canvas");
+      can.width = img.naturalWidth;
+      can.height = img.naturalHeight;
+      const ctx = can.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      return { dataUrl: can.toDataURL("image/png"), w: can.width, h: can.height };
+    } catch {
+      return null;
+    }
+  }
+  function loadImage(src) {
+    return new Promise((res, rej) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => res(img);
+      img.onerror = rej;
+      img.src = src;
+    });
+  }
+  function formatUserAnswer(q, user) {
+    if (user == null) return "-";
+    if (q.type === "mc") return typeof user === "number" ? (q.options[user] ?? String(user)) : String(user);
+    if (q.type === "tf") return user ? "Wahr" : "Falsch";
+    return String(user);
+  }
+  function correctAnswerText(q) {
+    if (q.type === "mc") return q.options?.[q.answer] ?? "";
+    if (q.type === "tf") return q.answer ? "Wahr" : "Falsch";
+    return "";
+  }
+
+  if (loading) {
+    return (
+      <div className="grid place-items-center gap-3">
+        <div className="animate-pulse text-sm text-gray-400">Lektion wird geladen ...</div>
+      </div>
+    );
+  }
+
+  /* Intro ohne Doppel-Bullet, ohne Fachbegriff ARIA */
+  if (showIntro) {
+    return (
+      <section className="duo-shell" aria-labelledby="intro-title">
+        <div className="duo-card" role="dialog" aria-modal="true" aria-describedby="intro-desc">
+          <h1 id="intro-title" className="duo-title">Quiz „Security Basics“</h1>
+          <p id="intro-desc" className="text-sm text-gray-300 mb-4">
+            Kurze, spielerische Runde zu IT-Security. Sammle XP, halte deine Serie und verliere keine Herzen.
+          </p>
+
+          <ul className="list-disc pl-5 text-sm text-gray-200 space-y-2 mb-4">
+            <li><b>Fragetypen:</b> Multiple Choice & Wahr/Falsch</li>
+            <li><b>Regeln:</b> richtig = +10 XP, falsch = −1 Herz (Start {RULES.START_HEARTS} Herzen)</li>
+            <li><b>Fortschritt:</b> {lesson?.questions?.length ?? 0} Fragen, sofortiges Feedback</li>
+            <li><b>Am Schluss:</b> Ergebnisse als <b>PDF</b> herunterladen (mit Logo)</li>
+            <li><b>Barrierefrei:</b> Tastaturbedienung & screenreader-kompatibel; „Bewegung reduzieren“ wird respektiert</li>
+          </ul>
+
+          <div className="flex items-center gap-4 text-sm text-gray-300 mb-5">
+            <span>❤️ {RULES.START_HEARTS} Herzen</span>
+            <span>•</span>
+            <span>🔥 Streak</span>
+            <span>•</span>
+            <span>⭐ XP pro richtig: {RULES.XP_CORRECT}</span>
+          </div>
+
+          <div className="duo-footer">
+            <Link className="ghost" href="/">Abbrechen</Link>
+            <button
+              className="primary"
+              autoFocus
+              onClick={() => setShowIntro(false)}
+              aria-label="Quiz starten"
+            >
+              Quiz starten
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (ended) {
+    const correctCount = answers.filter((a) => a.correct).length;
+    const pct = total ? Math.round((correctCount / total) * 100) : 0;
+    return (
+      <section className="section" aria-labelledby="summary-title">
+        <h1 id="summary-title" className="text-2xl font-extrabold mb-3">
+          Session-Zusammenfassung
+        </h1>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <SummaryStat label="XP gesamt" value={xpSession} />
+          <SummaryStat label="Trefferquote" value={`${pct}%`} />
+          <SummaryStat label="Herzen übrig" value={hearts} />
+          <SummaryStat label="Streak" value={streak} />
+        </div>
+
+        <Badges pct={pct} streak={streak} />
+        {!reducedMotion && <ConfettiLite key={`confetti-${pct}`} />}
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          <button className="btn btn-primary" onClick={restart}>Wiederholen</button>
+          <button className="btn btn-ghost" onClick={() => downloadPdf().catch(console.error)}>
+            PDF herunterladen
+          </button>
+          <Link className="btn btn-ghost" href="/">Zur Startseite</Link>
+        </div>
+
+        <div className="mt-6">
+          <h2 className="font-bold mb-2">Lernpunkte</h2>
+          <ul className="list-disc pl-5 text-sm text-gray-300 space-y-1">
+            {lesson.questions.map((qq, i) => {
+              const a = answers[i];
+              if (!a || a.correct) return null;
+              return (
+                <li key={qq.id}>
+                  <b className="text-gray-100">{qq.prompt}</b> – {qq.explain}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+    );
+  }
+
+  const progressPct = total ? Math.max(0, Math.min(100, (progress / total) * 100)) : 0;
+
   return (
-    <main style={{ maxWidth: 900, margin: "24px auto", display: "grid", gap: 16 }}>
-      {/* Kopfzeile mit Schrittanzeige */}
-      <div className="section" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <h1 style={{ margin: 0, color: "var(--red)" }}>Security Quiz</h1>
-        <div style={{ color: "var(--muted)" }}>
-          Schritt {step + 1} von {QUESTIONS.length}
+    <div className="duo-shell" aria-labelledby="quiz-title">
+      <div className="duo-topbar" role="navigation" aria-label="Sitzungsanzeige">
+        <Link href="/" className="duo-close" aria-label="Zurück zur Startseite">✕</Link>
+        <div className="duo-progress" aria-label={`Fortschritt ${progress}/${total}`}>
+          <span style={{ width: `${progressPct}%` }} />
+        </div>
+        <div className="duo-hearts" aria-label={`${hearts} Herzen übrig`}>
+          <span>❤️</span>
+          <span className="count">{hearts}</span>
         </div>
       </div>
 
-      {/* Fragekarte */}
-      <div className="quiz-card">
-        <div style={{ padding: "14px 16px", borderBottom: "1px solid var(--border)" }}>
-          <strong>{q.q}</strong>
-        </div>
+      <div className="duo-card" aria-live="polite">
+        <div className="duo-sub">Frage {q.indexLabel}</div>
+        <h1 id="quiz-title" className="duo-title">{lesson?.title ?? "Quiz"}</h1>
+        <h2 className="text-lg font-bold mb-3">{q.prompt}</h2>
 
-        <div style={{ padding: 16, display: "grid", gap: 10 }}>
-          {q.options.map((opt, idx) => {
-            const picked = selected === idx;
-            const showColors = showExplain && picked;
-            const base = "quiz-option";
-            const stateClass =
-              showColors ? (idx === q.correct ? "correct" : "wrong") : picked ? "selected" : "";
-            return (
+        <HintPopover hints={q.hints} onUseHint={() => setHintsUsed((n) => n + 1)} />
+
+        {q.type === "mc" && (
+          <div className="duo-options">
+            {q.options.map((opt, i) => (
               <button
-                key={idx}
-                onClick={() => choose(idx)}
-                className={`${base} ${stateClass}`}
+                key={i}
+                className="duo-option"
+                data-first={i === 0 ? "true" : undefined}
+                aria-label={`Antwort ${i + 1}: ${opt}`}
+                onClick={() => onAnswer({ correct: i === q.answer, user: i })}
               >
-                <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <span
-                    style={{
-                      height: 14,
-                      width: 14,
-                      borderRadius: "999px",
-                      border: "2px solid",
-                      borderColor: picked ? "var(--red)" : "rgba(255,255,255,0.35)",
-                      background: picked ? "var(--red)" : "transparent",
-                      flexShrink: 0,
-                    }}
-                  />
-                  {opt}
-                </span>
-
-                {showColors && (
-                  <span
-                    style={{
-                      fontWeight: 700,
-                      color: idx === q.correct ? "rgb(34,197,94)" : "rgb(239,68,68)",
-                      float: "right",
-                    }}
-                  >
-                    {idx === q.correct ? "Richtig" : "Falsch"}
-                  </span>
-                )}
+                <span className="font-mono mr-2">{i + 1}.</span> {opt}
               </button>
-            );
-          })}
-        </div>
-
-        {/* Erklärung */}
-        {showExplain && (
-          <div
-            style={{
-              borderTop: "1px solid var(--border)",
-              background: "rgba(255,255,255,0.04)",
-              padding: "14px 16px",
-            }}
-          >
-            <div
-              style={{
-                background: isCorrect ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)",
-                border: isCorrect
-                  ? "1px solid rgba(34,197,94,0.45)"
-                  : "1px solid rgba(239,68,68,0.6)",
-                color: isCorrect ? "rgb(187,247,208)" : "rgb(254,202,202)",
-                borderRadius: 10,
-                padding: 14,
-              }}
-            >
-              <strong>Erklärung:</strong> {q.explain}
-            </div>
+            ))}
           </div>
         )}
-      </div>
 
-      {/* Navigation unten */}
-      <div className="section" style={{ display: "flex", gap: 10, justifyContent: "space-between" }}>
-        <button
-          onClick={goPrev}
-          disabled={step === 0}
-          className="btn btn-ghost"
-          style={{ opacity: step === 0 ? 0.5 : 1 }}
-        >
-          Zurück
-        </button>
+        {q.type === "tf" && (
+          <div className="duo-options">
+            <button className="duo-option" data-first onClick={() => onAnswer({ correct: q.answer === true, user: true })}>Wahr</button>
+            <button className="duo-option" onClick={() => onAnswer({ correct: q.answer === false, user: false })}>Falsch</button>
+          </div>
+        )}
 
-        <div style={{ display: "flex", gap: 10 }}>
-          <button
-            onClick={goNext}
-            className="btn btn-primary"
-            disabled={chosen[step] === null}
-            style={{ opacity: chosen[step] === null ? 0.6 : 1 }}
-          >
-            {step === QUESTIONS.length - 1 ? "Fertig" : "Weiter"}
+        <div className="duo-footer">
+          <Link className="ghost" href="/">Später</Link>
+          <button className="primary" onClick={() => {}} aria-disabled>
+            Überprüfen
           </button>
         </div>
       </div>
-    </main>
+
+      <ResultToast toast={toast} />
+    </div>
+  );
+}
+
+/* ====== HILFS-KOMPONENTEN ====== */
+
+function HintPopover({ hints = [], onUseHint }) {
+  const [open, setOpen] = useState(false);
+  const [idx, setIdx] = useState(0);
+  if (!hints?.length) return null;
+
+  function next() {
+    onUseHint?.();
+    setOpen(true);
+    setIdx((i) => Math.min(i + 1, hints.length - 1));
+  }
+
+  return (
+    <div className="mb-3">
+      {open && (
+        <div
+          className="text-sm text-gray-300 bg-black/40 border border-white/10 p-2 rounded"
+          role="status"
+        >
+          Tipp: {hints[idx]}
+        </div>
+      )}
+      {idx < hints.length && (
+        <button className="btn btn-ghost mt-2" data-hint onClick={next}>
+          Hinweis anzeigen ({idx + 1}/{hints.length})
+        </button>
+      )}
+    </div>
+  );
+}
+
+function ResultToast({ toast }) {
+  const regionRef = useRef(null);
+  useEffect(() => {
+    if (toast && regionRef.current) regionRef.current.focus();
+  }, [toast]);
+  if (!toast) return null;
+  return (
+    <div
+      className="fixed bottom-4 right-4 bg-black/70 border border-white/10 rounded px-4 py-2 shadow"
+      role="status"
+      tabIndex={-1}
+      ref={regionRef}
+      aria-live="assertive"
+    >
+      {toast.type === "success" ? "✅" : "❌"} {toast.msg}
+    </div>
+  );
+}
+
+function SummaryStat({ label, value }) {
+  return (
+    <div className="quiz-card p-3">
+      <div className="text-[12px] uppercase tracking-wide text-gray-400">{label}</div>
+      <div className="text-xl font-extrabold">{value}</div>
+    </div>
+  );
+}
+
+function Badges({ pct, streak }) {
+  const list = useMemo(() => {
+    const arr = [];
+    if (pct === 100) arr.push({ name: "Perfekte Runde", emoji: "🏅" });
+    if (pct >= 80) arr.push({ name: "Sicherheitsprofi", emoji: "🛡️" });
+    if (streak >= 5) arr.push({ name: "Hot Streak 5+", emoji: "🔥" });
+    if (arr.length === 0) arr.push({ name: "Erste Schritte", emoji: "🎯" });
+    return arr;
+  }, [pct, streak]);
+  return (
+    <div className="mt-4">
+      <h3 className="font-bold mb-2">Abzeichen</h3>
+      <div className="flex flex-wrap gap-2">
+        {list.map((b) => (
+          <div key={b.name} className="quiz-card px-3 py-2 flex items-center gap-2">
+            <span>{b.emoji}</span>
+            <span className="font-semibold">{b.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ConfettiLite() {
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      {Array.from({ length: 36 }).map((_, i) => (
+        <span
+          key={i}
+          style={{
+            position: "absolute",
+            left: `${(i * 97) % 100}%`,
+            top: -10,
+            fontSize: 16,
+            animation: `fall ${(8 + (i % 5))}s linear ${(i % 10) * 0.2}s`,
+          }}
+        >
+          🎉
+        </span>
+      ))}
+      <style>{`@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+      @media (prefers-reduced-motion:reduce){span{animation:none!important}}`}</style>
+    </div>
   );
 }
