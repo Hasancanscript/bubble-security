@@ -584,6 +584,9 @@ function PartnersSection() {
     { alt: "Sunrise",          srcList: ["/sunrise.png", "/sunrise.svg"] },
     { alt: "Die Post",         srcList: ["/post.png", "/diepost.png", "/post.svg"] },
     { alt: "SBB CFF FFS",      srcList: ["/sbb.png", "/sbb.svg"] },
+    { alt: "AMAG",             srcList: ["/amag.png"] },
+    { alt: "Der Bund",         srcList: ["/bund.png"] },
+    { alt: "EMIL",             srcList: ["/emil.png"] },
   ];
 
   function LogoImage({ srcList, alt }) {
