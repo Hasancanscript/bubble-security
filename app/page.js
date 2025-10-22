@@ -20,7 +20,7 @@ export default function HomePage() {
 }
 
 /* =========================
-   Lern Demo Banner
+   Bereich vom Lern Demo Banner
    ========================= */
 function LernDemoBanner() {
   return (
@@ -259,7 +259,7 @@ function MatrixCanvas({ running }) {
 }
 
 /* =========================
-   Lerneinheiten Karten auf Home
+   Bereich vom Lerneinheiten Karten auf Home
    ========================= */
 function ServicesSection() {
   const services = [
@@ -302,7 +302,7 @@ function ServicesSection() {
           <span style={{ color: "var(--red)" }}>Unsere</span> Lerneinheiten
         </h2>
         <p style={{ color: "var(--muted)", marginTop: 8 }}>
-          Kurz und klar. Jede Lektion in 10 bis 15 Minuten.
+          Kurz und klar. Jede Lektion in 10 bis 15 Minuten. Du entscheidest wie lange du lernst !
         </p>
       </header>
 

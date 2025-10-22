@@ -12,7 +12,7 @@ export async function GET(_req, { params }) {
         id: "q1",
         type: "mc",
         prompt: "Welche Aktivität entfaltet Ransomware?",
-        options: ["Sie verschlüsselt Daten", "Sie beschleunigt die CPU", "Sie vergrößert den Bildschirm"],
+        options: ["Sie verschlüsselt Daten", "Sie beschleunigt die CPU", "Sie vergrössert den Bildschirm"],
         answer: 0,
         hints: ["Denk an Erpressung", "Dateien sind nicht mehr lesbar"],
         explain: "Ransomware verschlüsselt Daten und fordert Lösegeld."
@@ -108,7 +108,7 @@ export async function GET(_req, { params }) {
       {
         id: "q11",
         type: "mc",
-        prompt: "Welche Maßnahme macht Inhalte ohne Schlüssel unlesbar?",
+        prompt: "Welche Massnahme macht Inhalte ohne Schlüssel unlesbar?",
         options: ["Protokollierung", "Verschlüsselung", "Anonymisierung"],
         answer: 1,
         hints: ["Schlüssel erforderlich"],
@@ -132,11 +132,11 @@ export async function GET(_req, { params }) {
       {
         id: "q13",
         type: "mc",
-        prompt: "Wie heißt das regelmäßige Schließen von Sicherheitslücken?",
+        prompt: "Wie heisst das regelmässige Schliessen von Sicherheitslücken?",
         options: ["Tuning", "Patchen", "Backupen"],
         answer: 1,
         hints: ["Beginnt mit P"],
-        explain: "Regelmäßiges Patchen reduziert die Angriffsfläche deutlich."
+        explain: "Regelmässiges Patchen reduziert die Angriffsfläche deutlich."
       },
       // 14 ─ MC
       {
